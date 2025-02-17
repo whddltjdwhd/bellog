@@ -1,1 +1,1 @@
-## Castle Bell's custom blog
+## Castle Bell's Blog
