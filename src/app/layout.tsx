@@ -16,7 +16,11 @@ export default function RootLayout({
     <html>
       <body className="bg-[#8CA496]">
         <Header />
-        {children}
+        <div className="flex justify-center items-center w-full">
+          <div className="flex-col justify-start items-center w-[1000px]">
+            {children}
+          </div>
+        </div>
       </body>
     </html>
   );
