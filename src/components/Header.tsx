@@ -27,13 +27,6 @@ export default function Header() {
             Projects
             <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-black transition-all duration-500 group-hover:w-full"></span>
           </Link>
-          <Link
-            href="https://github.com/whddltjdwhd"
-            className="group relative text-black font-bold text-[25px]"
-          >
-            Github
-            <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-black transition-all duration-500 group-hover:w-full"></span>
-          </Link>
         </div>
       </div>
     </div>
