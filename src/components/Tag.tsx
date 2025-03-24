@@ -1,10 +1,9 @@
 interface TagProps {
   tagName: string;
   variant?: "large" | "small";
-  onClick?: () => void;
 }
 
-export default function Tag({ tagName, variant = "small", onClick }: TagProps) {
+export default function Tag({ tagName, variant = "small" }: TagProps) {
   const baseClass =
     "rounded-full text-center cursor-pointer transition-colors duration-200 max-w-full w-fit truncate";
 
@@ -13,9 +12,5 @@ export default function Tag({ tagName, variant = "small", onClick }: TagProps) {
 
   const style = variant === "large" ? largeStyles : smallStyles;
 
-  return (
-    <div onClick={onClick} className={`${baseClass} ${style}`}>
-      {tagName}
-    </div>
-  );
+  return <div className={`${baseClass} ${style}`}>{tagName}</div>;
 }
