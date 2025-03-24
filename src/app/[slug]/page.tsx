@@ -6,8 +6,11 @@ import html from "remark-html";
 import { Metadata } from "next";
 
 interface PostData {
+  emoji: string;
   title: string;
   date?: string;
+  preview: string;
+  tag: string;
   contentHtml: string;
 }
 
@@ -28,12 +31,11 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { slug } = await Promise.resolve(params);
   const postData = await getPostData(slug);
-
   return {
     title: postData.title,
-    description: postData.date
-      ? `게시 날짜: ${postData.date}`
-      : "블로그 포스트",
+    description:
+      postData.preview ||
+      (postData.date ? `게시 날짜: ${postData.date}` : "블로그 포스트"),
   };
 }
 
@@ -46,20 +48,27 @@ async function getPostData(slug: string): Promise<PostData> {
   const contentHtml = processedContent.toString();
 
   return {
+    emoji: data.emoji || "",
     title: data.title || slug,
     date: data.date,
+    preview: data.preview || "",
+    tag: data.tag || "",
     contentHtml,
   };
 }
 
-export default async function Page(props: PageProps) {
-  const { slug } = await Promise.resolve(props.params);
+export default async function Page({ params }: PageProps) {
+  const { slug } = await Promise.resolve(params);
   const postData = await getPostData(slug);
 
   return (
     <article>
-      <h1>{postData.title}</h1>
+      <h1>
+        {postData.emoji} {postData.title}
+      </h1>
       {postData.date && <p>{postData.date}</p>}
+      <p>{postData.preview}</p>
+      <p>Tag: {postData.tag}</p>
       <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
     </article>
   );
