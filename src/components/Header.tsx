@@ -1,9 +1,25 @@
+"use client";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export default function Header() {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.pageYOffset > 0);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className="flex justify-center items-center w-full h-[80px] bg-[#F6F4E2]">
+    <div
+      className={`flex justify-center items-center w-full h-[70px] bg-[#F6F4E2] sticky top-0 transition-all duration-80  ${
+        isScrolled && "bg-transparent/30 backdrop-blur-md"
+      }`}
+    >
       <div className="flex justify-between items-center w-[1000px]">
         <Link
           href="/"
