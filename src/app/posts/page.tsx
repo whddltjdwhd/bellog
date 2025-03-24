@@ -1,15 +1,7 @@
 import PostCard from "@/components/PostCard";
 import TagList from "@/components/TagList";
 import { getPosts } from "./utils";
-
-interface Post {
-  slug: string;
-  emoji: string;
-  title: string;
-  date?: string;
-  preview: string;
-  tag: string;
-}
+import { Post } from "@/types";
 
 interface PostsPageProps {
   searchParams: { tag?: string };

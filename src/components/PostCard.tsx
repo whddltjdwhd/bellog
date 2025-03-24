@@ -1,15 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Tag from "@/components/Tag";
-
-interface Post {
-  slug: string;
-  emoji: string;
-  title: string;
-  date?: string;
-  preview: string;
-  tag: string;
-}
+import { Post } from "@/types";
 
 interface PostCardProps {
   post: Post;

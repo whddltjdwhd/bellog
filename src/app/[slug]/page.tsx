@@ -4,15 +4,7 @@ import matter from "gray-matter";
 import { remark } from "remark";
 import html from "remark-html";
 import { Metadata } from "next";
-
-interface PostData {
-  emoji: string;
-  title: string;
-  date?: string;
-  preview: string;
-  tag: string;
-  contentHtml: string;
-}
+import { PostData } from "@/types";
 
 interface PageProps {
   params: { slug: string };
