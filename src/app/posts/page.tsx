@@ -1,8 +1,7 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import Link from "next/link";
-import Tag from "@/components/Tag";
+import PostCard from "@/components/PostCard";
 
 interface Post {
   slug: string;
@@ -42,36 +41,7 @@ export default async function PostsPage() {
       </div>
       <ul className="flex flex-col gap-6 w-full">
         {posts.map((post) => (
-          <li key={post.slug}>
-            <Link
-              href={`/${post.slug}`}
-              className="flex justify-between items-center flex-wrap hover:bg-black/[.2] transition-all duration-100 rounded-2xl max-w-full"
-            >
-              <section className="p-[10px_20px] flex justify-between items-center w-full">
-                {post.emoji && (
-                  <span className="text-5xl" aria-hidden="true">
-                    {post.emoji}
-                  </span>
-                )}
-
-                <div className="flex flex-col items-start max-w-[80%]">
-                  <h2 className="w-full text-3xl text-[#332C2C] font-bold truncate">
-                    {post.title}
-                  </h2>
-                  <span className="w-full mt-1 text-lg text-[#F6F4E2] truncate">
-                    {post.preview}
-                  </span>
-                </div>
-
-                <div className="mt-4 md:mt-0 text-right">
-                  {post.date && (
-                    <p className="text-sm text-[#F6F4E2]">{post.date}</p>
-                  )}
-                  {post.tag && <Tag tagName={post.tag}></Tag>}
-                </div>
-              </section>
-            </Link>
-          </li>
+          <PostCard key={post.slug} post={post} />
         ))}
       </ul>
     </main>
