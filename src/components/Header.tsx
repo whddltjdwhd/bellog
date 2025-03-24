@@ -16,7 +16,7 @@ export default function Header() {
 
   return (
     <div
-      className={`flex justify-center items-center w-full h-[70px] bg-[#F6F4E2] sticky top-0 transition-all duration-80  ${
+      className={`flex justify-center items-center w-full h-[70px] bg-[#F6F4E2] sticky top-0 transition-all duration-80 z-10 ${
         isScrolled && "bg-transparent/30 backdrop-blur-md"
       }`}
     >
