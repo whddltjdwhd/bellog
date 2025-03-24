@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import Link from "next/link";
+import Tag from "@/components/Tag";
 
 interface Post {
   slug: string;
@@ -66,9 +67,7 @@ export default async function PostsPage() {
                   {post.date && (
                     <p className="text-sm text-[#F6F4E2]">{post.date}</p>
                   )}
-                  {post.tag && (
-                    <p className="text-sm text-[#F6F4E2]">{post.tag}</p>
-                  )}
+                  {post.tag && <Tag tagName={post.tag}></Tag>}
                 </div>
               </section>
             </Link>
