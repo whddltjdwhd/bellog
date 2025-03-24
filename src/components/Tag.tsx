@@ -6,10 +6,10 @@ interface TagProps {
 
 export default function Tag({ tagName, variant = "small", onClick }: TagProps) {
   const baseClass =
-    "rounded-full text-center cursor-pointer transition-colors duration-200";
+    "rounded-full text-center cursor-pointer transition-colors duration-200 max-w-[120px] truncate";
 
-  const largeStyles = "px-4 py-2 bg-blue-100 text-blue-800 hover:bg-blue-200";
-  const smallStyles = "px-2 py-1 bg-gray-200 text-gray-800 text-sm";
+  const largeStyles = "px-4 py-2 bg-gray-100 text-gray-800 hover:bg-gray-200";
+  const smallStyles = "px-2 py-1 bg-gray-100 text-gray-800 text-sm";
 
   const style = variant === "large" ? largeStyles : smallStyles;
 
