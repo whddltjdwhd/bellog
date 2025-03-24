@@ -35,28 +35,46 @@ export default async function PostsPage() {
     });
 
   return (
-    <div className="flex flex-col w-full ">
-      <h1 className="flex justify-start items-center mb-4">ALL Posts</h1>
-      <ul className="flex flex-col gap-4 w-full">
+    <main className="flex flex-col w-full p-5">
+      <div className="mb-6">
+        <h1 className="text-3xl font-extrabold">ALL Posts</h1>
+      </div>
+      <ul className="flex flex-col gap-6 w-full">
         {posts.map((post) => (
-          <li
-            key={post.slug}
-            className="hover:bg-black/[.1] transition-all duration-100 cursor-pointer w-full p-4 rounded-[20px]"
-          >
-            <Link href={`/${post.slug}`}>
-              <h2 className="text-xl font-bold">
-                {post.emoji && <span>{post.emoji} </span>}
-                {post.title}
-              </h2>
+          <li key={post.slug}>
+            <Link
+              href={`/${post.slug}`}
+              className="flex justify-between items-center flex-wrap hover:bg-black/[.2] transition-all duration-100 rounded-2xl max-w-full"
+            >
+              <section className="p-[10px_20px] flex justify-between items-center w-full">
+                {post.emoji && (
+                  <span className="text-5xl" aria-hidden="true">
+                    {post.emoji}
+                  </span>
+                )}
+
+                <div className="flex flex-col items-start max-w-[80%]">
+                  <h2 className="w-full text-3xl text-[#332C2C] font-bold truncate">
+                    {post.title}
+                  </h2>
+                  <span className="w-full mt-1 text-lg text-[#F6F4E2] truncate">
+                    {post.preview}
+                  </span>
+                </div>
+
+                <div className="mt-4 md:mt-0 text-right">
+                  {post.date && (
+                    <p className="text-sm text-[#F6F4E2]">{post.date}</p>
+                  )}
+                  {post.tag && (
+                    <p className="text-sm text-[#F6F4E2]">{post.tag}</p>
+                  )}
+                </div>
+              </section>
             </Link>
-            {post.date && (
-              <p className="text-sm text-gray-500">게시 날짜: {post.date}</p>
-            )}
-            <p className="mt-2 truncate">{post.preview}</p>
-            {post.tag && <p className="mt-1 text-sm">{post.tag}</p>}
           </li>
         ))}
       </ul>
-    </div>
+    </main>
   );
 }
