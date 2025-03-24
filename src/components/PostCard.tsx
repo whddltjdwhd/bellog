@@ -38,7 +38,7 @@ export default function PostCard({ post }: PostCardProps) {
             </span>
           </div>
 
-          <div className="mt-4 md:mt-0 text-right">
+          <div className="flex flex-col items-end mt-4 md:mt-0 text-right w-[100px]">
             {post.date && <p className="text-sm text-[#F6F4E2]">{post.date}</p>}
             {post.tag && <Tag tagName={post.tag} />}
           </div>
