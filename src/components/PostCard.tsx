@@ -21,7 +21,7 @@ export default function PostCard({ post }: PostCardProps) {
             </span>
           )}
 
-          <div className="flex flex-col items-start max-w-[80%]">
+          <div className="flex flex-col items-start w-[80%]">
             <h2 className="w-full text-3xl text-[#332C2C] font-bold truncate">
               {post.title}
             </h2>

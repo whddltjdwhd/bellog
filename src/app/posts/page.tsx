@@ -10,13 +10,13 @@ interface PostsPageProps {
 export default async function PostsPage({ searchParams }: PostsPageProps) {
   const posts: Post[] = getPosts();
 
+  const tag = await searchParams?.tag;
+
   const uniqueTags = Array.from(
     new Set(posts.map((post) => post.tag).filter((tag) => tag !== ""))
   );
 
-  const filteredPosts = searchParams.tag
-    ? posts.filter((post) => post.tag === searchParams.tag)
-    : posts;
+  const filteredPosts = tag ? posts.filter((post) => post.tag === tag) : posts;
 
   return (
     <main className="flex flex-col w-full p-5">

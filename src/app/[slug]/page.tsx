@@ -55,13 +55,16 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <article className="main">
-      <h1>
-        {postData.emoji} {postData.title}
-      </h1>
-      {postData.date && <p>{postData.date}</p>}
-      <p>{postData.preview}</p>
-      <p>Tag: {postData.tag}</p>
-      <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
+      <h1 className="text-[70px]">{postData.emoji}</h1>
+      <h1>{postData.title}</h1>
+      <div className="flex justify-between items-center pb-7 border-b-2">
+        <p className="text-gray-800">{postData.tag}</p>
+        <p className="text-gray-800">{postData.date}</p>
+      </div>
+      <div
+        className="pt-7"
+        dangerouslySetInnerHTML={{ __html: postData.contentHtml }}
+      />
     </article>
   );
 }
