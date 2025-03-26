@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "@/styles/global.css";
-import Header from "@/components/Header";
+import Navbar from "@/components/Navbar";
 import localFont from "next/font/local";
 
 const myFont = localFont({
@@ -36,7 +36,7 @@ export default function RootLayout({
   return (
     <html lang="ko" className={myFont.className}>
       <body className="bg-[#8CA496]">
-        <Header />
+        <Navbar />
         <div className="flex justify-center items-center w-full">
           <div className="flex-col justify-start items-center w-[1000px]">
             {children}

@@ -37,11 +37,13 @@ export function Pre({ children, className, ...props }: CodeProps) {
     : codeStr;
 
   return (
-    <pre className={`language-${language}`} {...props}>
-      <code
-        className={`language-${language}`}
-        dangerouslySetInnerHTML={{ __html: highlightedCode }}
-      />
-    </pre>
+    <div className="my-8">
+      <pre className={`language-${language}`} {...props}>
+        <code
+          className={`language-${language}`}
+          dangerouslySetInnerHTML={{ __html: highlightedCode }}
+        />
+      </pre>
+    </div>
   );
 }
