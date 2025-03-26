@@ -35,7 +35,14 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children }) => {
         const slicedTokens = tokens.slice(0, -1);
 
         return (
-          <pre style={{ ...style, borderRadius: "10px", padding: "10px 0" }}>
+          <pre
+            style={{
+              ...style,
+              borderRadius: "10px",
+              padding: "10px 0",
+              margin: "20px 0",
+            }}
+          >
             {slicedTokens.map((line, i) => (
               <div key={i} {...getLineProps({ line })}>
                 <span style={{ padding: "0 15px 0 10px", color: "#6a6192" }}>
