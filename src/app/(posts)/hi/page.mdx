@@ -1,7 +1,9 @@
 ---
+emoji: ✨
 title: "Hello world!"
-publishDate: "2024-01-01T00:00:00Z"
-categories: ["hi", "hello"]
+date: "2024-01-01"
+preview: 안녕하세요 반갑습니다. 오랜만이에요
+tag: test
 ---
 
 # Hello world
@@ -9,5 +11,40 @@ categories: ["hi", "hello"]
 Welcome to my blog!
 
 ```js
-hi;
+var a = "hi";
+const b = "bye";
+
+<div>hi</div>
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    word-wrap: break-word;
+    font-size: 1.125rem; /* 기본 본문 크기 = 18px */
+    padding: 30px 0;
+    box-sizing: border-box;
+    line-height: 1.8;
+    color: hsl(var(--foreground));
+    max-width: 1000px;
+  }
+  interface PreProps {
+  children: React.ReactNode;
+}
+
+export function Pre({ children, ...props }: PreProps) {
+  const preRef = useRef<HTMLPreElement>(null);
+
+  useEffect(() => {
+    if (preRef.current) {
+      Prism.highlightAllUnder(preRef.current);
+    }
+  }, [children]);
+
+  return (
+    <pre ref={preRef} {...props}>
+      {children}
+    </pre>
+  );
+}
 ```

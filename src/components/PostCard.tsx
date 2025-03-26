@@ -1,10 +1,10 @@
 import React from "react";
 import Link from "next/link";
 import Tag from "@/components/Tag";
-import { Post } from "@/types";
+import { PostData } from "@/types";
 
 interface PostCardProps {
-  post: Post;
+  post: PostData;
 }
 
 export default function PostCard({ post }: PostCardProps) {
@@ -31,8 +31,8 @@ export default function PostCard({ post }: PostCardProps) {
           </div>
 
           <div className="flex flex-col items-end mt-4 md:mt-0 text-right w-[100px]">
-            {post.date && <p className="text-sm text-[#F6F4E2]">{post.date}</p>}
-            {post.tag && <Tag tagName={post.tag} />}
+            <p className="text-sm text-[#F6F4E2]">{post.date}</p>
+            <Tag tagName={post.tag} />
           </div>
         </section>
       </Link>

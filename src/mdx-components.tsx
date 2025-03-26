@@ -1,9 +1,9 @@
 import type { MDXComponents } from "mdx/types";
-import { Heading } from "./components/H1";
+import { Pre } from "./components/Pre";
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
-    h1: Heading,
+    pre: Pre,
     ...components,
   };
 }
