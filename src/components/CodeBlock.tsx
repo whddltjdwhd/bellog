@@ -11,23 +11,22 @@ interface CodeElementProps {
   className?: string;
 }
 
-export default function CodeBlock({ children }: CodeBlockProps): JSX.Element {
+export default function CodeBlock({
+  children,
+  className: codeClassName,
+}: CodeBlockProps): JSX.Element {
   let code = "";
-  let language = "javascript";
+  const language =
+    typeof codeClassName === "string"
+      ? codeClassName.replace(/language-/, "")
+      : "javascript";
 
-  if (isValidElement(children)) {
-    const { children: codeChildren, className: codeClassName } =
-      children.props as CodeElementProps;
-
-    code = typeof codeChildren === "string" ? codeChildren : "";
-    if (codeClassName && typeof codeClassName === "string") {
-      language = codeClassName.replace(/language-/, "");
-    }
-  } else if (typeof children === "string") {
-    code = children;
+  if (!isValidElement(children)) {
+    return <div>코드 파싱이 제대로 이루어지지 않았습니다.</div>;
   }
 
-  if (!code) return <div>코드 파싱이 제대로 이루어지지 않았습니다.</div>;
+  const { children: codeString } = children.props as CodeElementProps;
+  code = typeof codeString === "string" ? codeString : "";
 
   return (
     <Highlight theme={themes.dracula} code={code} language={language}>
