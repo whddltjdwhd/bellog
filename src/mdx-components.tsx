@@ -1,8 +1,8 @@
 import type { MDXComponents } from "mdx/types";
 import React from "react";
-import { Pre } from "./components/Pre";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import CodeBlock from "./components/CodeBlock";
 
 const H1: React.FC<React.HTMLAttributes<HTMLHeadingElement>> = (props) => (
   <h1 className="text-4xl font-bold my-7" {...props} />
@@ -77,7 +77,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     li: ListItem,
     hr: Hr,
     code: InlineCode,
-    pre: Pre,
+    pre: CodeBlock,
     Header: Header,
     Footer: Footer,
     ...components,
