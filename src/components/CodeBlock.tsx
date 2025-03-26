@@ -1,4 +1,4 @@
-import React from "react";
+import React, { JSX, isValidElement } from "react";
 import { Highlight, themes } from "prism-react-renderer";
 
 interface CodeBlockProps {
@@ -11,11 +11,11 @@ interface CodeElementProps {
   className?: string;
 }
 
-const CodeBlock: React.FC<CodeBlockProps> = ({ children }) => {
+export default function CodeBlock({ children }: CodeBlockProps): JSX.Element {
   let code = "";
   let language = "javascript";
 
-  if (React.isValidElement(children)) {
+  if (isValidElement(children)) {
     const { children: codeChildren, className: codeClassName } =
       children.props as CodeElementProps;
 
@@ -58,6 +58,4 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ children }) => {
       }}
     </Highlight>
   );
-};
-
-export default CodeBlock;
+}
