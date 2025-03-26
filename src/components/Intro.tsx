@@ -1,17 +1,37 @@
+"use client";
 import Link from "next/link";
 import React from "react";
+import { TypeAnimation } from "react-type-animation";
 
 export default function Intro() {
   return (
     <div className="flex justify-between items-center w-full h-[300px]">
       <div className="flex flex-col justify-evenly items-start gap-[30px] text-white text-[30px] h-full">
-        <div className="flex flex-col justify-center items-start font-semibold">
-          <div>안녕하세요, </div>
-          <div> 이해하는 개발자 이성종입니다.</div>
+        <div className="flex flex-col justify-center h-[90px] items-start font-light whitespace-pre-line">
+          <TypeAnimation
+            sequence={[
+              `안녕하세요, \n이해하는 개발자 이성종입니다.`,
+              2000,
+              "",
+              500,
+            ]}
+            wrapper="div"
+            cursor={true}
+            repeat={Infinity}
+          />
         </div>
-        <div className="flex flex-col justify-center items-start font-semibold">
-          <div>좋은 개발자이기 전에, </div>
-          <div>좋은 사람이 되고 싶습니다.</div>
+        <div className="flex flex-col justify-center  h-[90px] items-start font-light whitespace-pre-line">
+          <TypeAnimation
+            sequence={[
+              `좋은 개발자이기 전에, \n좋은 사람이 되고 싶습니다.`,
+              3000,
+              "",
+              500,
+            ]}
+            wrapper="div"
+            cursor={true}
+            repeat={Infinity}
+          />
         </div>
       </div>
 
