@@ -54,7 +54,7 @@ export default async function Page({ params }: PageProps) {
   const postData = await getPostData(slug);
 
   return (
-    <article>
+    <article className="main">
       <h1>
         {postData.emoji} {postData.title}
       </h1>
