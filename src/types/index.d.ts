@@ -1,10 +1,8 @@
 export interface PostData {
-  emoji: string;
+  slug: string;
   title: string;
-  date: string;
-  preview: string;
-  tag: string;
-  contentHtml: string;
+  publishDate: string;
+  categories: string[];
 }
 
 interface Post {
