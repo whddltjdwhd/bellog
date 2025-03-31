@@ -1,0 +1,17 @@
+export const meta = {
+  emoji: "✨",
+  title: "Notion",
+  date: "2024-01-32",
+  preview: "안녕하세요 반갑습니다. 오랜만이에요",
+  tag: "test",
+};
+
+<Header {...meta} />
+
+## 사용한 기술 NextJS + TailwindCSS
+
+마크다운 파싱: @next/mdx
+
+처음에는 마크다운 파싱을 remark, remark-html로 했었다. 그러다가 @next/mdx 가 nextJS에서 지원하기도 하고 무엇보다 전역 MDXProvider를 제공하여서, 전역적인 스타일링 하기가 용이하다고 판단했다.
+
+remark, remark-html의 경우에는 tailwind의 preflight 스타일 때문에, 기본 h1, h2, code와 같은 태그들의 스타일이 초기화가 된다. 그렇기에 @base 레이아웃에 오버라이드를 하여서 스타일을 재정의 해줘야 한다. css 파일에 그 많은 것들을 작성한다는게 좀 거부감이 느껴졌달까..? 개인 취향인 것 같기도 하다. 결국엔 스타일 재정의 해주는건 똑같은 거니까.

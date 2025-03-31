@@ -1,34 +1,29 @@
-import PostCard from "@/components/PostCard";
+import PostList from "@/components/PostList";
 import TagList from "@/components/TagList";
-import { getPosts } from "./utils";
-import { Post } from "@/types";
 
-interface PostsPageProps {
-  searchParams: { tag?: string };
+import { getPosts } from "@/lib/posts";
+import { getTags } from "@/lib/tags";
+import React from "react";
+
+interface PageProps {
+  searchParams: {
+    tag?: string;
+  };
 }
 
-export default async function PostsPage({ searchParams }: PostsPageProps) {
-  const posts: Post[] = getPosts();
+export default async function Page({ searchParams }: PageProps) {
+  const posts = await getPosts();
+  const tags = await getTags();
+  const params = await searchParams;
 
-  const uniqueTags = Array.from(
-    new Set(posts.map((post) => post.tag).filter((tag) => tag !== ""))
-  );
-
-  const filteredPosts = searchParams.tag
-    ? posts.filter((post) => post.tag === searchParams.tag)
+  const filteredPosts = params.tag
+    ? posts.filter((post) => post.tag === params.tag)
     : posts;
 
   return (
-    <main className="flex flex-col w-full p-5">
-      <div className="mb-6">
-        <h1 className="text-3xl font-extrabold">Posts</h1>
-      </div>
-      {uniqueTags.length > 0 && <TagList tags={uniqueTags} />}
-      <ul className="flex flex-col gap-6 w-full">
-        {filteredPosts.map((post) => (
-          <PostCard key={post.slug} post={post} />
-        ))}
-      </ul>
-    </main>
+    <div className="w-full flex flex-col gap-[5px] mt-[30px]">
+      <TagList tags={tags} />
+      <PostList posts={filteredPosts} />
+    </div>
   );
 }

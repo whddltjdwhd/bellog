@@ -1,0 +1,113 @@
+export const meta = {
+  emoji: "✨",
+  title: "Hello world!",
+  date: "2024-01-01",
+  preview: "안녕하세요 반갑습니다. 오랜만이에요",
+  tag: "test1",
+};
+
+<Header {...meta} />
+
+## 개발 내용
+
+---
+
+[화면 녹화 중 2024-08-14 022028.mp4](https://prod-files-secure.s3.us-west-2.amazonaws.com/2611c896-b1a2-4631-8369-03a1e93c7ca4/d7ae7c14-dac6-4f3c-a06f-5a96c6724e9d/%ED%99%94%EB%A9%B4_%EB%85%B9%ED%99%94_%EC%A4%91_2024-08-14_022028.mp4)
+
+- useField 커스텀 훅을 이용해 진출분야에 해당하는 과목 리스트를 받아왔다.
+
+## 고민한 것
+
+---
+
+진출분야 데이터의 구조가 다음과 같다.
+
+```jsx
+// 대분류
+[
+  {
+    fieldCode: "string",
+    largeField: "string",
+  },
+][
+  // 중분류
+  {
+    fieldCode: "string",
+    largeField: "string",
+    middleField: "string",
+  }
+][
+  // 소분류
+  {
+    fieldCode: "string",
+    largeField: "string",
+    middleField: "string",
+    smallField: "string",
+  }
+][
+  // 세분류
+  {
+    fieldCode: "string",
+    largeField: "string",
+    middleField: "string",
+    smallField: "string",
+    detailField: "string",
+  }
+];
+```
+
+이것을 보고 나는 ‘어! 각 분류마다 중첩이 되어가는 형태네?’ 현재 코드를 좀 더 효율적으로 바꿀 수 있겠다고 생각했다.
+
+중분류는 대분류 정보를 가지고 있고, 소분류는 중분류, 대분류를 가지고 있고, 세분류는 소분류, 중분류, 대분류 정보를 가지고 있다. 즉 현재 분류의 상위 정보를 누적하여 가지고 있는 것이다.
+
+현재는 각 분류에 대해 따로따로 atom을 선언하여 상태를 관리하고 있다.
+
+```jsx
+useEffect(() => {
+  fetchLargeField();
+}, []);
+
+const selectLargeField = (e) => {
+  const data = JSON.parse(e.target.value);
+  fetchMiddleField(data);
+};
+
+const selectMiddleField = (e) => {
+  const data = JSON.parse(e.target.value);
+  fetchSmallField(data);
+};
+
+const selectSmallField = (e) => {
+  const data = JSON.parse(e.target.value);
+  fetchDetailField(data);
+};
+```
+
+위와 같이 각 분류에 대해 함수를 따로 만들어 처리를 해주고 있다.
+
+> 그렇다면 그냥 하나의 state 로 관리하면 되지 않을까!?
+
+그렇게 된다면 각 fetch 마다 다음과 같이 동일한 코드를 이용하여, 코드를 간결히 할 수 있다고 생각했다.
+
+```jsx
+const selectField = (e) => {
+  const data = JSON.parse(e.target.value);
+  fetchField(data);
+};
+```
+
+그러나 결론은 실패였다. 어찌보면 당연한 결과인 것 같다.
+
+현재 코드는 option 태그에 변화가 일어날 때마다 선택한 분류에 대한 다음 하위 분류를 fetch 해오고 있다. 그러나 위 아이디어처럼 하나의 상태로 관리하게 된다면, 이것이 불가능 해진다.
+
+대분류를 선택하게 되면 onChange 로 인해 대분류를 기반으로 한 중분류를 fetch하게 된다. 그렇게 되면 대분류의 상태 또한 변하게 된다.
+
+즉 다음과 같은 상황이 벌어지게 된다.
+
+[20240813-1754-09.7377554.mp4](https://prod-files-secure.s3.us-west-2.amazonaws.com/2611c896-b1a2-4631-8369-03a1e93c7ca4/099f6781-6928-4f5a-af21-ea049534d30e/20240813-1754-09.7377554.mp4)
+
+## 느낀점
+
+---
+
+한번 작성한 코드를 다시 되돌이켜 보는 습관을 길러야겠다. 언제나 최선의 코드를 작성하도록 지향하고자 하지만 실제로는 시간에 쫓겨 디테일한 부분을 신경쓰지 못하는 경우가 많은 것 같다. 이러한 부분을 고쳐나가야겠다.
