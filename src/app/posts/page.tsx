@@ -6,15 +6,13 @@ import { getTags } from "@/lib/tags";
 import React from "react";
 
 interface PageProps {
-  searchParams: {
-    tag?: string;
-  };
+  searchParams: Promise<{ tag?: string }>;
 }
 
 export default async function Page({ searchParams }: PageProps) {
+  const params = await searchParams;
   const posts = await getPosts();
   const tags = await getTags();
-  const params = await searchParams;
 
   const filteredPosts = params.tag
     ? posts.filter((post) => post.tag === params.tag)
