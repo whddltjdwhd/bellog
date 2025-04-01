@@ -1,8 +1,8 @@
 export const meta = {
   emoji: "✨",
-  title: "Hello world!",
+  title: "마크다운 테스트",
   date: "2024-01-01",
-  preview: "안녕하세요 반갑습니다. 오랜만이에요",
+  preview: "마크다운 스타일 테스트입니다.",
   tag: "test",
 };
 
@@ -48,10 +48,23 @@ export const meta = {
 
 코드 블럭 예시:
 
-```javascript
+```jsx{2,4-6}title=greetFunction
 function greet(name) {
   return `Hello, ${name}!`;
 }
-
+console.log('다음 함수는 greet 함수입니다.');
 console.log(greet("World"));
+```
+
+```json,title=jsonTest
+{
+  "name": "Alice",
+  "age": 30,
+  "isDeveloper": true,
+  "languages": [
+    "JavaScript",
+    "Python",
+    "C++"
+  ]
+}
 ```
