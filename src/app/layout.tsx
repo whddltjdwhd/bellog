@@ -26,6 +26,9 @@ const myFont = localFont({
 export const metadata: Metadata = {
   title: "Bellog",
   description: "Castle Bell's Blog",
+  icons: {
+		icon: "/icon.png",
+	},
 };
 
 export default function RootLayout({
