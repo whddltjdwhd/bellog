@@ -61,6 +61,7 @@ const containerStyle: React.CSSProperties = {
 };
 
 const titleStyle: React.CSSProperties = {
+  userSelect: "none",
   background: "#f5f5f5",
   padding: "8px 15px",
   borderTopLeftRadius: "10px",
