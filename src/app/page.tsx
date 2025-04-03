@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import Intro from "@/components/Intro";
 import PostList from "@/components/PostList";
 import { getPosts } from "@/lib/posts";
@@ -16,6 +17,7 @@ export default async function Home() {
           </h1>
         </div>
         <PostList posts={slicedPosts} />
+        <Footer />
       </div>
     </div>
   );
