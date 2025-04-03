@@ -9,28 +9,21 @@ export default function Intro() {
       <div className="flex flex-col justify-evenly items-start gap-[30px] text-white text-[30px] h-full">
         <div className="flex flex-col justify-center h-[90px] items-start font-light whitespace-pre-line">
           <TypeAnimation
-            sequence={[
-              `안녕하세요, \n이해하는 개발자 이성종입니다.`,
-              2000,
-              "",
-              500,
-            ]}
+            sequence={[`안녕하세요, \n이해하는 개발자 이성종입니다.`]}
             wrapper="div"
-            cursor={true}
-            repeat={Infinity}
+            cursor={false}
+            repeat={0}
           />
         </div>
         <div className="flex flex-col justify-center  h-[90px] items-start font-light whitespace-pre-line">
           <TypeAnimation
             sequence={[
+              1500,
               `좋은 개발자이기 전에, \n좋은 사람이 되고 싶습니다.`,
-              3000,
-              "",
-              500,
             ]}
             wrapper="div"
-            cursor={true}
-            repeat={Infinity}
+            cursor={false}
+            repeat={0}
           />
         </div>
       </div>

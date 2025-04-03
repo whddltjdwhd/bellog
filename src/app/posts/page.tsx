@@ -2,7 +2,6 @@ import PostList from "@/components/PostList";
 import TagList from "@/components/TagList";
 
 import { getPosts } from "@/lib/posts";
-import { getTags } from "@/lib/tags";
 import React from "react";
 
 interface PageProps {
@@ -12,7 +11,7 @@ interface PageProps {
 export default async function Page({ searchParams }: PageProps) {
   const params = await searchParams;
   const posts = await getPosts();
-  const tags = await getTags();
+  const tags = Array.from(new Set(posts.map((post) => post.tag)));
 
   const filteredPosts = params.tag
     ? posts.filter((post) => post.tag === params.tag)
