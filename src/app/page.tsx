@@ -11,7 +11,9 @@ export default async function Home() {
       <Intro />
       <div className="w-full">
         <div className="w-full">
-          <h1 className="text-2xl pb-5">Recent Posts</h1>
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl pb-5">
+            Recent Posts
+          </h1>
         </div>
         <PostList posts={slicedPosts} />
       </div>

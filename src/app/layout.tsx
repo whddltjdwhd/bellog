@@ -27,8 +27,8 @@ export const metadata: Metadata = {
   title: "Bellog",
   description: "Castle Bell's Blog",
   icons: {
-		icon: "/icon.png",
-	},
+    icon: "/icon.png",
+  },
 };
 
 export default function RootLayout({
@@ -40,10 +40,8 @@ export default function RootLayout({
     <html lang="ko" className={myFont.className}>
       <body className="bg-[#8CA496]">
         <Navbar />
-        <div className="flex justify-center items-center w-full">
-          <div className="flex-col justify-start items-center w-[1000px]">
-            {children}
-          </div>
+        <div className="flex flex-col items-center justify-center w-full">
+          <div className="w-full max-w-[1010px] p-5 mx-auto">{children}</div>
         </div>
       </body>
     </html>

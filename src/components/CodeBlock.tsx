@@ -12,7 +12,6 @@ interface CodeElementProps {
 
 // meta 정보를 파싱하는 헬퍼 함수
 function parseMeta(className?: string) {
-  // console.log(className);
   const result = {
     highlight: [] as number[],
     title: "",
@@ -51,7 +50,7 @@ function parseMeta(className?: string) {
   if (titleMatch) {
     result.title = titleMatch[1].trim();
   }
-  // console.log(result);
+
   return result;
 }
 
@@ -77,6 +76,7 @@ const lineNumberStyle: React.CSSProperties = {
   textAlign: "end",
   padding: "0 15px 0 10px",
   color: "#6a6192",
+  flexShrink: 0,
 };
 
 const preStyle: React.CSSProperties = {
@@ -96,7 +96,6 @@ export default function CodeBlock({ children }: CodeBlockProps): JSX.Element {
   const { children: codeString } = children.props as CodeElementProps;
   const code = typeof codeString === "string" ? codeString : "";
 
-  // console.log(language);
   return (
     <div style={containerStyle}>
       {title && <div style={titleStyle}>{title}</div>}
