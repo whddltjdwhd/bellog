@@ -11,10 +11,8 @@ export default async function Home() {
     <div className="flex flex-col justify-between items-center gap-[10px] w-full">
       <Intro />
       <div className="w-full">
-        <div className="w-full">
-          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl pb-5">
-            Recent Posts
-          </h1>
+        <div className="w-full pt-7 pb-2">
+          <h1 className="sm:text-2xl md:text-3xl pb-5">Recent Posts</h1>
         </div>
         <PostList posts={slicedPosts} />
         <Footer />
