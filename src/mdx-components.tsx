@@ -3,6 +3,7 @@ import React from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import CodeBlock from "./components/CodeBlock";
+import MDXImage from "./components/MDXImage";
 
 const H1: React.FC<React.HTMLAttributes<HTMLHeadingElement>> = (props) => (
   <h1
@@ -118,8 +119,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     th: TableHeader,
     td: TableData,
     br: LineBreak,
-    Header: Header,
-    Footer: Footer,
+    Header,
+    Footer,
+    MDXImage,
     ...components,
   };
 }
