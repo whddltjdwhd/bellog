@@ -15,4 +15,4 @@ scenarios:
   - name: "테스트 엔드포인트"
     flow:
       - get:
-          url: "/test-sync"
+          url: "/first-blog"

@@ -19,7 +19,7 @@ WORKDIR /app
 
 # 빌드 산출물, public 폴더, package.json, lock 파일 복사
 COPY --from=builder /app/.next ./.next
-# (다른 줄) public 폴더를 프로덕션 스테이지에 복사
+# public 폴더를 프로덕션 스테이지에 복사
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/pnpm-lock.yaml ./
@@ -28,4 +28,5 @@ RUN npm install -g pnpm
 RUN pnpm install --prod --ignore-scripts
 
 EXPOSE 3000
+
 CMD ["pnpm", "start"]

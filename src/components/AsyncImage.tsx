@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { getPlaiceholder } from "plaiceholder";
 import fs from "fs/promises";
 import path from "path";
+import { getPlaiceholder } from "plaiceholder";
 
 interface MDXImageProps {
   src: string;
