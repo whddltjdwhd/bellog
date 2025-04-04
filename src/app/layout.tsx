@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "@/styles/global.css";
 import Navbar from "@/components/Navbar";
 import localFont from "next/font/local";
+import Providers from "./providers";
 
 const myFont = localFont({
   src: [
@@ -41,7 +42,9 @@ export default function RootLayout({
       <body className="bg-[#8CA496]">
         <Navbar />
         <div className="flex flex-col items-center justify-center w-full">
-          <div className="w-full max-w-[1010px] p-5 mx-auto">{children}</div>
+          <div className="w-full max-w-[1010px] p-5 mx-auto">
+            <Providers>{children}</Providers>
+          </div>
         </div>
       </body>
     </html>
