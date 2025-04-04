@@ -1,0 +1,18 @@
+# 파일명: test-high-load.yaml
+config:
+  target: "http://localhost:3000"
+  phases:
+    - name: "초기 준비 단계"
+      duration: 10
+      arrivalRate: 50 # 첫 10초 동안 초당 50명
+    - name: "중간 부하 단계"
+      duration: 10
+      arrivalRate: 100 # 다음 10초 동안 초당 100명
+    - name: "고부하 단계"
+      duration: 20
+      arrivalRate: 200 # 마지막 20초 동안 초당 200명
+scenarios:
+  - name: "테스트 엔드포인트"
+    flow:
+      - get:
+          url: "/test-async"
