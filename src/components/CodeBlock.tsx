@@ -46,7 +46,7 @@ function parseMeta(className?: string) {
     });
   }
 
-  const titleMatch = className.match(/title=([\w\s\-]+)/);
+  const titleMatch = className.match(/title=([\w\s.\-]+)/);
   if (titleMatch) {
     result.title = titleMatch[1].trim();
   }
