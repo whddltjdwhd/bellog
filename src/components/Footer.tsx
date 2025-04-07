@@ -16,6 +16,8 @@ export default function Footer() {
           <Link
             href="https://github.com/whddltjdwhd"
             className="group relative"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             Github
             <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-black transition-all duration-500 group-hover:w-full"></span>

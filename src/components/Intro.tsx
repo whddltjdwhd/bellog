@@ -39,6 +39,8 @@ export default function Intro() {
         <Link
           href={"https://github.com/whddltjdwhd"}
           className="group relative text-black font-bold text-[18px] md:text-[25px]"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           Github
           <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-black transition-all duration-500 group-hover:w-full" />
@@ -46,6 +48,8 @@ export default function Intro() {
         <Link
           href={"https://velog.io/@whddltjdwhd/posts"}
           className="group relative text-black font-bold text-[18px] md:text-[25px]"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           Prev Blog
           <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-black transition-all duration-500 group-hover:w-full" />
