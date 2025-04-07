@@ -68,6 +68,7 @@ const titleStyle: React.CSSProperties = {
   border: "1px solid #e1e1e1",
   borderBottom: "none",
   fontWeight: "bold",
+  fontSize: "clamp(14px, 2vw, 18px)",
 };
 
 const lineNumberStyle: React.CSSProperties = {
@@ -77,12 +78,14 @@ const lineNumberStyle: React.CSSProperties = {
   padding: "0 15px 0 10px",
   color: "#6a6192",
   flexShrink: 0,
+  fontSize: "clamp(12px, 1.5vw, 16px)",
 };
 
 const preStyle: React.CSSProperties = {
   padding: "10px 0",
   margin: 0,
   overflowX: "auto",
+  fontSize: "clamp(12px, 1.5vw, 16px)",
 };
 
 export default function CodeBlock({ children }: CodeBlockProps): JSX.Element {
