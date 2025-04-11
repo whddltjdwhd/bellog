@@ -50,7 +50,14 @@ const Paragraph: React.FC<React.HTMLAttributes<HTMLParagraphElement>> = (
 
 const Link: React.FC<React.AnchorHTMLAttributes<HTMLAnchorElement>> = (
   props
-) => <a className="text-indigo-800 hover:underline" {...props} />;
+) => (
+  <a
+    className="text-indigo-800 hover:underline"
+    target="_blank"
+    rel="noopener noreferrer"
+    {...props}
+  />
+);
 
 const Blockquote: React.FC<React.BlockquoteHTMLAttributes<HTMLElement>> = (
   props
