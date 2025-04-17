@@ -7,19 +7,14 @@ import Providers from "./providers";
 const myFont = localFont({
   src: [
     {
-      path: "../../public/fonts/GmarketSansTTFLight.ttf",
+      path: "../../public/fonts/NotoSansKR-VariableFont_wght.ttf",
       weight: "300",
       style: "normal",
     },
     {
-      path: "../../public/fonts/GmarketSansTTFMedium.ttf",
+      path: "../../public/fonts/NotoSansKR-VariableFont_wght.ttf",
       weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/GmarketSansTTFBold.ttf",
-      weight: "700",
-      style: "normal",
+      style: "strong",
     },
   ],
 });
@@ -38,14 +33,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={myFont.className}>
-      <body className="bg-[#8CA496]">
-        <Navbar />
-        <div className="flex flex-col items-center justify-center w-full">
-          <div className="w-full max-w-[1010px] p-5 mx-auto">
-            <Providers>{children}</Providers>
+    <html lang="ko" className={myFont.className} suppressHydrationWarning>
+      <body className="bg-[var(--bg)]">
+        <Providers>
+          <Navbar />
+          <div className="flex flex-col items-center justify-center w-full">
+            <div className="w-full max-w-[1010px] p-5 mx-auto">{children}</div>
           </div>
-        </div>
+        </Providers>
       </body>
     </html>
   );
