@@ -104,6 +104,7 @@ export default function CodeBlock({ children }: CodeBlockProps): JSX.Element {
                       textAlign: "end",
                       padding: "0 15px 0 10px",
                       opacity: 0.5,
+                      flexShrink: 0,
                     }}
                   >
                     {lineNumber}
