@@ -1,3 +1,7 @@
+"use client";
+
+import React from "react";
+
 interface TagProps {
   tagName: string;
   variant?: "large" | "small";
@@ -12,14 +16,20 @@ export default function Tag({
   const baseClass =
     "rounded-full text-center cursor-pointer transition-colors duration-200 max-w-full w-fit truncate";
 
-  const largeStyles = selected
-    ? "px-3 py-1 sm:px-4 sm:py-2 bg-blue-200 text-blue-800 hover:bg-blue-300"
-    : "px-3 py-1 sm:px-4 sm:py-2 bg-gray-100 text-gray-800 hover:bg-gray-300";
-  const smallStyles = selected
-    ? "px-2 py-1 sm:px-3 sm:py-1 bg-blue-200 text-blue-800 text-[10px] sm:text-[12px]"
-    : "px-2 py-1 sm:px-3 sm:py-1 bg-gray-100 text-gray-800 text-[10px] sm:text-[12px]";
+  const selectedBg = "bg-[var(--primary)] hover:bg-[var(--primary-dark)]";
+  const unselectedBg = "bg-[var(--surface)] hover:bg-[var(--border)]";
+  const selectedText = "text-[var(--surface)]";
+  const unselectedText = "text-[var(--text)]";
 
-  const style = variant === "large" ? largeStyles : smallStyles;
+  const largeSize = "px-3 py-1 sm:px-4 sm:py-2";
+  const smallSize = "px-2 py-1 sm:px-3 sm:py-1 text-[10px] sm:text-[12px]";
 
-  return <div className={`${baseClass} ${style}`}>{tagName}</div>;
+  const sizeClass = variant === "large" ? largeSize : smallSize;
+  const colorClass = selected
+    ? `${selectedBg} ${selectedText}`
+    : `${unselectedBg} ${unselectedText}`;
+
+  return (
+    <div className={`${baseClass} ${sizeClass} ${colorClass}`}>{tagName}</div>
+  );
 }
