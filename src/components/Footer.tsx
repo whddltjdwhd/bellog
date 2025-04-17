@@ -1,27 +1,23 @@
-import Link from "next/link";
 import React from "react";
+import FooterLink from "./FooterLink";
 
 export default function Footer() {
   return (
-    <footer className="w-full py-4 mb-8 mt-16 sm:mt-36 text-center">
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-        <p className="text-sm text-amber-50">
-          All rights reserved by castle_bell
+    <footer className="w-full  mb-8 mt-16 sm:mt-36 text-center">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mx-auto">
+        <p className="text-sm text-[var(--text)]">
+          © castle_bell · All rights reserved
         </p>
+
         <div className="flex gap-3">
-          <Link href={"/posts"} className="group relative">
-            Posts
-            <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-black transition-all duration-500 group-hover:w-full"></span>
-          </Link>
-          <Link
+          <FooterLink href="/posts">Posts</FooterLink>
+          <FooterLink
             href="https://github.com/whddltjdwhd"
-            className="group relative"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Github
-            <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-black transition-all duration-500 group-hover:w-full"></span>
-          </Link>
+            GitHub
+          </FooterLink>
         </div>
       </div>
     </footer>

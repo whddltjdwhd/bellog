@@ -1,49 +1,37 @@
 "use client";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import NavItem from "./NavItem";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.pageYOffset > 0);
-    };
-
+    const handleScroll = () => setIsScrolled(window.pageYOffset > 0);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div
-      className={`flex justify-center items-center w-full h-[70px] sticky top-0 transition-all duration-80 z-10 ${
-        isScrolled ? "bg-transparent/30 backdrop-blur-md" : "bg-[#F6F4E2]"
-      }`}
+    <nav
+      className={`flex justify-center items-center w-full h-[70px] sticky top-0 z-10 transition-all duration-200
+        ${
+          isScrolled
+            ? "backdrop-blur-md bg-[var(--surface)]/80 shadow-sm"
+            : "bg-[var(--surface)]"
+        }`}
     >
-      <div className="flex justify-between items-center w-full max-w-4xl">
-        <Link
-          href="/"
-          className="group relative text-black font-bold text-lg sm:text-xl md:text-2xl mr-auto"
-        >
+      <div className="flex w-full max-w-4xl items-center justify-between px-3">
+        <NavItem href="/" className="mr-auto">
           Bellog
-          <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-black transition-all duration-500 group-hover:w-full"></span>
-        </Link>
+        </NavItem>
 
-        <Link
-          href="/about"
-          className="group relative text-black font-bold text-lg sm:text-xl md:text-2xl mr-8"
-        >
+        <NavItem href="/about" className="sm:inline-block mr-3 sm:mr-8">
           About
-          <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-black transition-all duration-500 group-hover:w-full"></span>
-        </Link>
-        <Link
-          href="/projects"
-          className="group relative text-black font-bold text-lg sm:text-xl md:text-2xl"
-        >
+        </NavItem>
+        <NavItem href="/projects" className="sm:inline-block">
           Projects
-          <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-black transition-all duration-500 group-hover:w-full"></span>
-        </Link>
+        </NavItem>
       </div>
-    </div>
+    </nav>
   );
 }
