@@ -6,7 +6,7 @@ import { TypeAnimation } from "react-type-animation";
 export default function Intro() {
   return (
     <div className="flex flex-col md:flex-row justify-between items-center w-full h-auto md:h-[300px] p-4">
-      <div className="flex flex-col justify-evenly items-start gap-4 text-white text-[24px] md:text-[30px] h-full">
+      <div className="flex flex-col justify-evenly items-start gap-4 text-[24px] md:text-[30px] h-full">
         <div className="flex flex-col justify-center items-start font-light whitespace-pre-line">
           <TypeAnimation
             sequence={[`안녕하세요, \n이해하는 개발자 이성종입니다.`]}

@@ -33,14 +33,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={myFont.className}>
+    <html lang="ko" className={myFont.className} suppressHydrationWarning>
       <body className="bg-[var(--bg)]">
-        <Navbar />
-        <div className="flex flex-col items-center justify-center w-full">
-          <div className="w-full max-w-[1010px] p-5 mx-auto">
-            <Providers>{children}</Providers>
+        <Providers>
+          <Navbar />
+          <div className="flex flex-col items-center justify-center w-full">
+            <div className="w-full max-w-[1010px] p-5 mx-auto">{children}</div>
           </div>
-        </div>
+        </Providers>
       </body>
     </html>
   );
