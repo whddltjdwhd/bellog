@@ -3,6 +3,7 @@ import "@/styles/global.css";
 import Navbar from "@/components/Navbar";
 import localFont from "next/font/local";
 import Providers from "./providers";
+import { Analytics } from "@vercel/analytics/react";
 
 const myFont = localFont({
   src: [
@@ -38,7 +39,10 @@ export default function RootLayout({
         <Providers>
           <Navbar />
           <div className="flex flex-col items-center justify-center w-full">
-            <div className="w-full max-w-[1010px] p-5 mx-auto">{children}</div>
+            <div className="w-full max-w-[1010px] p-5 mx-auto">
+              {children}
+              <Analytics />
+            </div>
           </div>
         </Providers>
       </body>
