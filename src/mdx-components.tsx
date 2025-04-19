@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import CodeBlock from "./components/CodeBlock";
 import MDXImage from "./components/MDXImage";
+import MDXVideo from "./components/MDXVideo";
 
 const H1: React.FC<React.HTMLAttributes<HTMLHeadingElement>> = (props) => (
   <h1
@@ -144,6 +145,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     Header,
     Footer,
     MDXImage,
+    MDXVideo,
     ...components,
   };
 }
