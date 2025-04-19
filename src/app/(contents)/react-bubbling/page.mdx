@@ -1,0 +1,183 @@
+export const meta = {
+  emoji: "🫡",
+  title: "키오스쿨 실시간 주문 상세 모달 버그 해결기",
+  date: "2025-04-17",
+  preview: "React 이벤트 버블링 원인 분석 및 클릭 영역 확장 적용 사례",
+  tag: "Kioschool",
+};
+
+<Header {...meta} />
+
+키오스쿨 서비스 관련한 사용자 의견 인터뷰 중 갑작스런 버그를 발견했다.(가장 민망한 순간…) 다행히 새로고침을 하니 해당 버그는 사라진 듯 보여서 어찌어찌 넘어갔다. 어떤 버그였냐면, 실시간 주문 조회에서 주문 상세보기 모달을 열고, 주문의 상태를 변화(ex: 주문완료 → 결제완료) 버튼을 클릭하면 화면 스크롤이 막히는 버그였다.
+
+<MDXVideo
+  src="/videos/react-bubbling/react-bubbling1.mp4"
+  alt="모달스크롤버그1"
+/>
+
+모달이 닫힌 후에도 body에 `overflow: hidden` 속성이 적용되어 스크롤이 안되고 있었다.
+
+## 왜 이런 일이 발생했을까?
+
+우선 modal을 렌더링하는 `OrderDetailModalButton` 컴포넌트를 살펴보자.
+
+```tsx,title=OrderDetailModalButton
+function OrderDetailModalButton({ order }: Props) {
+  const { isModalOpen, openModal, closeModal, modalKey } = useModal();
+
+  if (!isModalOpen) {
+    return <RightIcon onClick={openModal} />;
+  }
+
+  return createPortal(
+    <>
+      <ModalOverlay onClick={closeModal} />
+      <ModalContainer>
+        <OrderModalHeaderContents onClose={closeModal} order={order} />
+        <OrderModalMainContents order={order} />
+        <OrderModalFooterContents orderStatus={order.status} id={order.id} />
+      </ModalContainer>
+    </>,
+    document.getElementById(modalKey) as HTMLElement
+  );
+}
+
+export default OrderDetailModalButton;
+```
+
+그리고 `useModal` 훅을 살펴보자.
+
+```tsx,title=useModalHook
+function useModal() {
+  const modalKey = "modal-root";
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const openModal = () => {
+    setModalOpen(true);
+    // 모달창 open 시 배경 스크롤 금지 코드
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    // 모달창 open 시 배경 스크롤 금지 해제 코드
+    document.body.style.overflow = "auto";
+  };
+
+  return { isModalOpen, openModal, closeModal, modalKey };
+}
+
+export default useModal;
+```
+
+`openModal`에서 `overflow: hidden`을 주고, `closeModal`에서 `overflow: auto`를 주고 있다. 스크롤이 잠긴다는 건, `closeModal`이 호출되지 않았다는 의미다. 확인해보니, 주문 상태 변경 버튼에 `closeModal` 호출이 빠져 있었다. 이를 추가하니 첫번째 버그는 해결이 됐다!
+
+## 모달을 트리거하는 범위를 확장해 달라는 요청
+
+추가적으로 ‘>’ 아이콘에서 `OrderCard` 컴포넌트 주요 영역 전체로 클릭 범위를 넓여달라는 요구가 있었다.
+
+<MDXImage
+  src="/images/react-bubbling/react-bubbling1.png"
+  alt="ASIS,TOBE주문카드"
+/>
+
+`OrderDetailModalButton` 대신 부모 컴포넌트인 `OrderCard`에서 `useModal`을 호출하고, props로 state와 `closeModal`을 넘겨주는 구조로 변경했다.
+
+```tsx,title=OrderCardComponent
+function OrderCard({ order }: OrderCardProps) {
+  const { isModalOpen, openModal, closeModal } = useModal();
+
+  const orderInfoClickHandler = () => {
+    openModal();
+  };
+
+  return (
+    <CardContainer>
+      <OrderInfoContainer onClick={orderInfoClickHandler}>
+        { /* 주문 카드 주요 내용 */ }
+        <OrderDetailModal
+          order={order}
+          isModalOpen={isModalOpen}
+          closeModal={closeModal}
+        />
+      </OrderInfoContainer>
+    </CardContainer>
+  );
+}
+```
+
+하지만, 모달을 닫아도 다시 열리는 현상이 발생했다.
+
+## 버블링이 원인?!
+
+`OrderDetailModal`에서 `closeModal`이 정상 호출됨에도, 부모의 `orderInfoClickHandler` 이벤트가 버블링되어 다시 `openModal`이 호출되고 있었다.
+
+<MDXVideo src="/videos/react-bubbling/react-bubbling2.mp4" alt="버블링영상" />
+
+## createPortal은 버블링을 막아주지 않는다
+
+나는 `createPortal`로 다음과 같이 `OrderCard`와 `OrderDetailModal`이 분리되어 렌더링 되기 때문에, 버블링이 발생하지 않을 것이라 생각했다.
+
+<MDXImage
+  src="/images/react-bubbling/react-bubbling3.png"
+  alt="createPortal구조"
+/>
+
+그러나 React의 Synthetic Event 시스템은 **컴포넌트 트리**를 기준으로 버블링을 시뮬레이션한다. 따라서 `createPortal`로 실제 위치가 분리돼도, 트리 상 부모-자식 관계에 따라 이벤트는 버블링된다.
+
+<MDXImage src="/images/react-bubbling/react-bubbling4.png" alt="DOM구조" />
+
+## 3가지 해결 방법
+
+#### 방법1. 조건부 열기
+
+```jsx,title=OrderInfoClickHandler
+const orderInfoClickHandler = () => {
+  // 모달이 닫혀 있을 때만 열기
+  if (!isModalOpen) openModal();
+};
+```
+
+`OrderDetailModal`에서 `closeModal`이 호출되어 내부적으로 `setIsModalOpen(false)`가 스케쥴링 되고, 아직 `isModalOpen`은 `true`인 상태로 `orderInfoClickHandler`가 호출이 된다. 현재 `isModalOpen`은 `true`이므로 `openModal`이 실행되지 않는다. 이후 스케쥴링이 되었던 `setIsModalOpen(false)`가 실행되고, 모달이 닫히게 된다. 해당 방법은 모달이 닫히지 않는 문제는 해결하지만, 버블링 문제를 근본적으로 해결하고 있지 않다.
+
+#### 방법2. 컴포넌트 구조 변경 ✅
+
+```tsx,title=OrderDetailModal위치이동,{4}
+// OrderDetailModal을 OrderInfoContainer 바깥에 렌더링
+<CardContainer>
+  <OrderInfoContainer onClick={orderInfoClickHandler}>…</OrderInfoContainer>
+  <OrderDetailModal … />
+</CardContainer>
+```
+
+`OrderDetailModal` 컴포넌트의 위치를 `OrderInfoContainer`와 동등하거나 그 이상인 위치로 이동시킴으로써 버블링이 일어나지 않도록 한다.
+
+#### 방법3. stopPropagation
+
+```tsx,title=StopPropagation,{5}
+function OrderDetailModal({ order, isModalOpen, closeModal }: Props) {
+  if (!isModalOpen) return null;
+
+  const closeModalHandler = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    closeModal();
+  };
+
+  return createPortal(
+    <>
+      <ModalOverlay onClick={closeModalHandler} />
+      <ModalContainer>…</ModalContainer>
+    </>,
+    document.getElementById("modal-root")!
+  );
+}
+```
+
+`OrderDetailModal`에서 `e.stopPropagation`을 명시적으로 호출한다.
+
+위 3가지 중 **방법2**를 적용해 간결하게 문제를 해결했다.
+
+참고 블로그:
+
+- https://hmos.dev/event-propagation-of-react
+- https://inpa.tistory.com/entry/JS-%F0%9F%93%9A-%EB%B2%84%EB%B8%94%EB%A7%81-%EC%BA%A1%EC%B3%90%EB%A7%81
