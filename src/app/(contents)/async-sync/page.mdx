@@ -108,38 +108,15 @@ This isn't recommended because this blocks the node.js main thread, which reduce
 However if you still need to use this package syncronously, you can read the file syncronously into a buffer, and then pass the buffer to this library.
 ```
 
-동기적으로 파일을 읽어오면 node.js의 메인 쓰레드를 멈추게 하고, 이는 곧 성능 저하로 이어진다고 한다.
-
-[다음 답변](https://stackoverflow.com/questions/17604866/difference-between-readfile-and-readfilesync)에서는 ‘절대’ 쓰지 말라고 하기도 한다.
+동기적으로 파일을 읽어오면 node.js의 메인 쓰레드를 멈추게 하고, 이는 곧 성능 저하로 이어진다고 한다. [다음 답변](https://stackoverflow.com/questions/17604866/difference-between-readfile-and-readfilesync)에서는 ‘절대’ 쓰지 말라고 하기도 한다.
 
 ## 그러면 어떻게 작성하는게 좋을까?
 
 > 해당 코드가 반드시 정답은 아니다.
 
-```tsx,title=AsyncImage.tsx
-import Image from "next/image";
-import { getPlaiceholder } from "plaiceholder";
-import fs from "fs/promises";
-import path from "path";
-
-interface MDXImageProps {
-  src: string;
-  alt: string;
-}
-
-interface ImageMetadata {
-  width: number;
-  height: number;
-  blurDataURL?: string;
-}
-
-// This function can be used with getStaticProps or in a Server Component
-export async function getImageMetadata(src: string): Promise<ImageMetadata> {
-  try {
-    const imagePath = path.join(process.cwd(), "public", src);
+```tsx,title=AsyncImage.tsx,{1}
     const buffer = await fs.readFile(imagePath);
 
-    // Get image dimensions and optional blur placeholder
     const { metadata, base64 } = await getPlaiceholder(buffer);
 
     return {
@@ -147,32 +124,6 @@ export async function getImageMetadata(src: string): Promise<ImageMetadata> {
       height: metadata.height,
       blurDataURL: base64,
     };
-  } catch (error) {
-    console.error(`Error processing image ${src}:`, error);
-    return { width: 700, height: 475 };
-  }
-}
-
-// For use in Server Components (App Router)
-export default async function AsyncImage({ src, alt }: MDXImageProps) {
-  const imageMetadata = await getImageMetadata(src);
-
-  return (
-    <Image
-      src={src}
-      alt={alt || ""}
-      width={imageMetadata.width}
-      height={imageMetadata.height}
-      placeholder={imageMetadata.blurDataURL ? "blur" : "empty"}
-      blurDataURL={imageMetadata.blurDataURL}
-      style={{
-        maxWidth: "100%",
-        height: "auto",
-      }}
-      className="rounded-[10px]"
-    />
-  );
-}
 ```
 
 단순히 readFileSync를 readFile로 바꿔줬다. (짜잔~) 그리고 plaiceholder 라이브러리를 이용해 이미지가 덜 로딩 되었을 때, 블러 처리를 해주었다. 과연 이 둘의 성능 차이는 얼마나 날까?
@@ -214,27 +165,13 @@ scenarios:
 <MDXImage src="/images/async-sync/Artllery3.png" alt="부하테스트 결과3" />
 
 사실 둘의 차이는 거의 없다. (하하하) 이렇게 결론을 맺으면 재미가 없으니까! 데이터를 좀만 더 분석해보자.
+우선, 트래픽이 적은 상황에서는 동기와 비동기 방식 모두 평균 응답 시간이 거의 0ms로 비슷하게 나타났다. 그러나 부하가 증가할수록 두 방식의 특성이 점차 뚜렷해진다.
 
-우선, 트래픽이 적은 상황에서는 동기와 비동기 방식 모두 평균 응답 시간이 0ms 정도로 비슷하게 동작했다. 하지만 부하가 증가할수록 두 방식의 특성이 명확하게 드러났다.
+동기 방식은 마치 한 개 차선만 있는 도로와 같다. 차량(요청)이 적을 때는 빠르게 통과하지만, 동시 요청이 몰리면 차선이 금세 포화되어 입구에서부터 차량이 막힌다. 실제로 클라이언트 측 포트가 고갈(EADDRINUSE)되면서 새 연결 생성이 지연돼 전체 성공률이 낮아지고, P95, P99 구간의 응답 시간도 크게 증가했다.
 
-1. **저부하 환경(100 RPS)**
+반면, 비동기 방식은 다차선 고속도로와 유사하다. 중부하까지는 여러 요청을 동시에 처리해 안정적인 흐름을 유지하지만, 서버의 I/O 버퍼 자원이 임계점에 다다르면 결국 모든 차선이 포화된다. 이때 다량의 연결 거부(ECONNREFUSED) 오류가 발생하며 응답 지연이 급격히 확대된다.
 
-   두 방식 모두 평균 응답 시간이 약 0ms로 빠르게 동작했으며, 지연 시간도 미미했다. 이 구간에서는 큰 차이를 느낄 수 없었다.
-
-2. **중간 부하 환경(500 RPS)**
-   - **비동기 방식**
-     비동기 처리 덕분에 대부분의 요청이 거의 즉시 응답되었고, P95 기준 응답 시간이 50ms 이하로 안정적으로 유지되었다. 여기서부터는 동기 방식과 초당 처리하는 요청에서 조금 더 앞서나갔다.
-   - **동기 방식**
-     동기 방식은 한 번에 하나씩 처리하기 때문에 일부 요청이 대기하면서 P95 응답 시간이 약 150ms까지 상승했다.
-3. **고부하 환경(예: 1000 RPS)**
-   - **동기 방식**
-     동기 방식은 개별 요청의 처리 시간은 상대적으로 낮았지만, 동시 요청이 몰리면서 클라이언트 측 포트 고갈(EADDRINUSE) 등의 문제가 발생해 전체 성공률이 낮아졌고, P95 및 P99 응답 시간도 크게 증가했다.
-   - **비동기 방식**
-     비동기 방식은 초기 동시 처리에서 효율적이었으나 임계 부하를 넘어서면 서버에서 다량의 연결 거부(ECONNREFUSED) 오류와 함께 응답 지연이 급증했다. 이는 I/O와 내부 리소스가 포화 상태에 이르렀기 때문이다.
-
-결론적으로, 저부하에서 중부하까지는 비동기 방식이 응답 지연 없이 더 안정적으로 동작했으나, 고부하 환경에서는 두 방식 모두 한계에 도달해 응답 지연과 실패율이 급격히 증가했다.
-
-동기 방식은 개별 요청의 지연을 낮게 유지했지만, 전체 처리량 측면에서는 클라이언트 자원 고갈 문제가 발생했다. 반면, 비동기 방식은 초기에는 높은 처리량을 보였으나, 임계치를 넘어서면 서버 자원 부족과 연결 거부 오류로 인해 성능이 급락했다.
+결론적으로, 저부하에서 중부하 구간까지는 비동기 방식이 더 높은 처리량과 짧은 응답 지연을 보였으나, 극심한 고부하 환경에서는 두 방식 모두 한계에 달해 실패율과 지연이 동시에 급증한다.
 
 ## 만약 현업 환경이었다면?
 
@@ -278,4 +215,4 @@ phases:
 
 그 결과 다행히 결과가 나왔다. (모두 실패가 아닌거에 감사함..ㅠㅠㅠ)
 
-왜 도커로 띄우면 안되는 건지 아직도 잘 파악하지 못했다. 그런데 컴퓨터를 껐다 키면 딱 최초 1회는 괜찮게 나온다. 그 이후로는 아무리 약한 부하를 걸어도 다 실패를 한다. hmm.. 나중에 꼭 원인을 밝히고야 말겠다!
+왜 도커로 띄우면 안되는 건지 아직도 잘 파악하지 못했다. 그런데 컴퓨터를 껐다 키면 딱 최초 1회는 괜찮게 나온다. 그 이후로는 아무리 약한 부하를 걸어도 다 실패를 한다. 이 부분은 좀 더 공부해서 나중에 다시 시도해봐야겠다.
