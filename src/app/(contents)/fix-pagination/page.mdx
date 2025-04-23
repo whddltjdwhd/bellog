@@ -1,0 +1,216 @@
+export const meta = {
+  emoji: "👀",
+  title: "제대로 된 페이지네이션 구현하기",
+  date: "2025-01-11",
+  preview: "useSearchParams를 통해 제대로 페이지네이션을 구현해보았다.",
+  tag: "Kioschool",
+};
+
+<Header {...meta} />
+
+## 문제 1 - 쿼리 스트링
+
+---
+
+기존에는 pagination 페이지에서 쿼리 스트링에 page 값을 저장하여 불러오는 방식으로 구현되어 있었다.
+
+`http://localhost:3000/super-admin/user?page=0`
+
+해당 `page` 키 값은 API 통신을 하는 커스텀 훅에서 바꿔주고 있었다.
+
+```tsx
+const response = superAdminApi
+  .get<PaginationResponse<User>>("/users", { params })
+  .then((res) => {
+    searchParams.set("page", params.page.toString());
+    setSearchParams(searchParams);
+    return res.data;
+  });
+```
+
+이렇게 하다 보니, 문제가 발생했다. 바로 URL이 두 번 바뀌게 되는 것이었다.
+
+관리 페이지에서 전체 사용자 조회 페이지로 넘어가는 순간을 살펴보자.
+
+- **관리 페이지 URL**: `http://localhost:3000/super-admin/manage`
+- **사용자 조회 URL**: `http://localhost:3000/super-admin/user?page=0`
+
+사용자 조회 클릭 시 `super-admin/manage` → `super-admin/user` 로 한 번 바뀌고, 0번 page의 사용자 데이터를 fetch 해오고 **setSearchParams**로 `super-admin/user` → `super-admin/user?page=0` 으로 또 한 번 더 바뀐다.
+
+<MDXVideo
+  src="videos/fix-pagination/fix-pagination1.mp4"
+  alt="쿼리 스트링으로 페이지 상태 관리"
+/>
+
+이렇게 총 두 번 바뀌게 된다. 따라서 사용자가 전체 사용자 조회 화면에서 뒤로 가기 버튼을 **한 번** 눌렀을 때, `super-admin/user?page=0` → `super-admin/user` 로 URL이 바뀌게 되어 의도한 대로 관리 페이지로 돌아갈 수 없게 된다.
+
+### 해결 방법
+
+---
+
+위 문제는 `setSearchParams`에 옵션 객체로 `replace: true`를 넘겨주면 해결할 수 있다.
+
+```jsx
+setSearchParams(searchParams, { replace: true });
+```
+
+이렇게 함으로써 history 스택에 새 항목을 추가하는 대신 현재 항목을 대체할 수 있다. 하지만 개발하다 보니 또 다른 문제가 발견되었다.
+
+## 문제 2 - API 중복 요청
+
+---
+
+API가 두 번씩 요청되는 현상이 발생했다.
+
+<MDXVideo
+  src="videos/fix-pagination/fix-pagination2.mp4"
+  alt="API 중복 호출 문제"
+/>
+
+그 원인은 `SuperAdminWorkspace` 컴포넌트에서 `useEffect`에 `searchParams`를 의존성으로 넣고, 내부에서 `fetchAndSetWorkspaces` 호출 후 `setSearchParams`로 쿼리를 변경했기 때문이다. 이로 인해 `searchParams`가 변경되고 `useEffect`가 재실행되어 또다시 API를 호출하는 순환이 발생했다.
+
+```tsx,title=SuperAdminWorkspace.tsx
+useEffect(() => {
+  const nowPage = Number(searchParams.get("page"));
+  const searchValue = userInputRef.current?.value || "";
+
+  fetchAndSetWorkspaces(nowPage, pageSize, searchValue, true);
+}, [searchParams]);
+```
+
+```tsx,title=fetchAndSetWorkspaces
+// fetch와 searchParams set을 동시에 하고 있다.
+ const fetchAllWorkspaces = (page: number, size: number, name?: string, replace?: boolean) => {
+    . . .
+
+    const response = superAdminApi
+      .get<PaginationResponse<Workspace>>('/workspaces', { params })
+      .then((res) => {
+        searchParams.set('page', params.page.toString());
+        setSearchParams(searchParams, { replace });
+        return res.data;
+      })
+
+    return response;
+  };
+```
+
+위와 같은 구조는 무한 API 호출 및 렌더링이 발생하게 된다.
+
+`useEffect`실행 → `fetchAndSet`호출 → `setSearchParams`에서 `searchParams`변경 → `useEffect`실행 → `fetchAndSet`호출 → . . .
+
+**_그러나 그런 일은 일어나지 않았다._** 그 이유가 뭘까?
+
+그것은 바로 useSearchParams에서 반환되는 searchParams와 setSearchParams는 각각 useMemo와 useCallBack이 적용되어 있기 때문이다. ([useSearchParams 분석](https://www.notion.so/useSearchParams-1adb0b4f310a4b34abcd1904aa7bdfd8?pvs=21))
+
+그래서 나는 운이 좋게도? 2번의 중복된 API호출만 발생한 것이다. 해당 API 호출의 과정은 다음과 같다.
+
+컴포넌트가 마운트 됐을 때 **useEffect**실행 → **fetchAndSet**함수 실행`[1]` → **setSearchParams**로 **searchParams**변경 (캐싱 시작) → **useEffect**실행 → **fetchAndSet**함수 실행`[2]` → **setSearchParams**로 **seachParams**변경 (이전과 동일한 값이므로 캐싱 유지)
+
+### 해결 방법
+
+---
+
+**useEffect**에서도 fetch를 하고, **Pagination** 컴포넌트, 심지어 **SuperAdminSearchBar**(검색바) 컴포넌트에서도 페이지 클릭 시 fetch를 하고 있다. 이런 구조는 정말 좋아 보이지 않는다.
+
+지금은 운이 좋아서 API 요청이 2번 이루어지는 부작용만 있지만 나중에는 엄청 심각한 결과를 초래할 수 있기 때문이다.
+
+책임을 분리하여, **fetch** 로직은 오직 `useEffect` 내에서만 실행되게 하고, 페이지 변경이나 검색어 입력 시에는 `searchParams`만 변경하여 `useEffect`를 트리거하도록 구조를 개선했다.
+
+#### BEFORE
+
+```tsx,title=SuperAdminWorkspace.tsx
+useEffect(() => {
+  const nowPage = Number(searchParams.get("page"));
+  const searchValue = userInputRef.current?.value || "";
+
+  fetchAndSetWorkspaces(nowPage, pageSize, searchValue, true);
+}, [searchParams]);
+```
+
+```tsx,title=Pagination.tsx
+    <Pagination
+      totalPageCount={workspaces.totalPages}
+      paginateFunction={(page: number) => {
+        fetchAndSetWorkspaces(page, pageSize, userInputRef.current?.value);
+      }}
+    />
+```
+
+```tsx,title=SuperAdminSearchBar.tsx
+    // 검색창 컴포넌트
+    const SuperAdminSearchBar = forwardRef<HTMLInputElement, SuperAdminSearchBarProps>((props, ref) => {
+    // fetchContents === fetchAndSet()
+    props.fetchContents(0, 6, ref.current?.value, false);
+  };
+```
+
+#### AFTER
+
+```tsx,title=SuperAdminWorkspace.tsx
+  useEffect(() => {
+    const nowPage = Number(searchParams.get('page'));
+    const searchValue = searchParams.get('name') || '';
+
+    fetchAndSetWorkspaces(nowPage, pageSize, searchValue);
+    // 사실 searchParams는 useMemo로 동결되어 관리되기 때문에, toString()을 해줄 필요는 없다.
+  }, [searchParams.toString()]);
+```
+
+```tsx,title=Pagination.tsx
+    <Pagination
+      totalPageCount={workspaces.totalPages}
+      paginateFunction={(page: number) => {
+        searchParams.set('page', page.toString());
+        setSearchParams(searchParams);
+      }}
+    />
+```
+
+```tsx,title=SuperAdminSearchBar.tsx
+function SuperAdminSearchBar() {
+  const fetchContentsByName = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // 검색어로 검색하면 0번 page로 이동
+    searchParams.set('page', '0');
+
+    // name의 유무에 따라 name params 추가 및 삭제
+    if (inputRef.current?.value === '') {
+      searchParams.delete('name');
+    } else {
+      searchParams.set('name', String(inputRef.current?.value));
+    }
+    // fetchAndSet대신 set만 수행
+    setSearchParams(searchParams);
+  };
+```
+
+```tsx,title=fetchAllWorkspaces
+  const fetchAllWorkspaces = (page: number, size: number, name?: string) => {
+
+    const response = superAdminApi
+      .get<PaginationResponse<Workspace>>('/workspaces', { params })
+      .then((res) => {
+        return res.data;
+      })
+
+    return response;
+  };
+```
+
+<MDXVideo
+  src="videos/fix-pagination/fix-pagination3.mp4"
+  alt="최종 개선된 페이지네이션 데모"
+/>
+책임을 분리하여 좀 더 나은 코드가 되었고, 모든게 정상적으로 작동한다!
+
+## 후기
+
+---
+
+문제 정의부터 해결책 적용까지 과정을 통해 `useSearchParams` 훅의 동작 원리를 깊이 이해할 수 있었고, 책임 분리의 중요성을 다시 한번 느꼈다. 점점 더 깊게 생각하는 태도를 갖추려고 노력하는 중이다.
+
+참고링크
+
+- https://github.com/remix-run/react-router/blob/main/packages/react-router/lib/hooks.tsx
+- https://alexsidorenko.com/blog/react-render-usememo
+- https://joong-sunny.github.io/react/react1/#google_vignette
