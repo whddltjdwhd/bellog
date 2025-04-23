@@ -137,7 +137,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({ code, language }) => {
 
 그러나 의도한 대로 코드블럭이 렌더링되지 않았다. 바로 props(code, language)가 undefined로 넘겨지고 있었다.
 
-[해당 문서](https://v0.mdxjs.com/guides/syntax-highlighting)에서 mdx의 provider에서는 코드블럭 정보를 children으로 받을 수 있다는 사실을 알아냈다. children은 Reac.Node 타입이다.
+[해당 문서](https://mdxjs.com/packages/react/#fields)에서 mdx의 provider에서는 코드블럭 정보를 children으로 받을 수 있다는 사실을 알아냈다. children은 Reac.Node 타입이다.
 
 ```js,title=children
 {
