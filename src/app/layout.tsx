@@ -4,6 +4,7 @@ import Navbar from "@/components/Navbar";
 import localFont from "next/font/local";
 import Providers from "./providers";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const myFont = localFont({
   src: [
@@ -42,6 +43,7 @@ export default function RootLayout({
             <div className="w-full max-w-[1010px] p-5 mx-auto">
               {children}
               <Analytics />
+              <SpeedInsights />
             </div>
           </div>
         </Providers>
