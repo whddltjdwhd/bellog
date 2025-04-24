@@ -10,7 +10,7 @@ interface MDXVideoProps {
   className?: string;
 }
 
-const MDXVideo: React.FC<MDXVideoProps> = ({
+const MDXVideo = ({
   src,
   poster,
   controls = true,
@@ -18,7 +18,7 @@ const MDXVideo: React.FC<MDXVideoProps> = ({
   loop = false,
   muted = false,
   className = "",
-}) => {
+}: MDXVideoProps) => {
   const isYouTube = /(?:youtube\.com\/watch\?v=|youtu\.be\/)/.test(src);
 
   if (isYouTube) {
