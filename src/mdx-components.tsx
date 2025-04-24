@@ -87,7 +87,10 @@ const OrderedList = (props: React.OlHTMLAttributes<HTMLOListElement>) => (
 );
 
 const ListItem = (props: React.HTMLAttributes<HTMLLIElement>) => (
-  <li className="my-1" {...props} />
+  <li
+    className="my-1 break-words overflow-wrap-anywhere max-w-full"
+    {...props}
+  />
 );
 
 const Hr = (props: React.HTMLAttributes<HTMLHRElement>) => (
