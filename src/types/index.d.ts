@@ -13,3 +13,10 @@ export interface TagProps {
   selected?: boolean;
   counts: number;
 }
+
+export interface Section {
+  id: string;
+  top: number;
+  bottom: number;
+  depth: 1 | 2 | 3;
+}

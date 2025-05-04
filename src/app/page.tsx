@@ -8,7 +8,7 @@ export default async function Home() {
   const slicedPosts = posts.slice(0, 5);
 
   return (
-    <div className="flex flex-col justify-between items-center gap-[10px] w-full">
+    <div className="flex flex-col justify-between items-center gap-[10px] w-[1010px] ">
       <Intro />
       <div className="w-full">
         <div className="w-full pt-7 mb-4 border-b-1 border-[var(--border)]">

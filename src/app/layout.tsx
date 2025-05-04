@@ -36,15 +36,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" className={myFont.className} suppressHydrationWarning>
-      <body className="bg-[var(--bg)]">
+      <body className="bg-[var(--bg)] w-full flex flex-col justify-center items-center">
         <Providers>
           <Navbar />
-          <div className="flex flex-col items-center justify-center w-full">
-            <div className="w-full max-w-[1010px] p-5 mx-auto">
-              {children}
-              <Analytics />
-              <SpeedInsights />
-            </div>
+          <div className="w-full max-w-[1250px] flex flex-col justify-center items-center">
+            {children}
+            <Analytics />
+            <SpeedInsights />
           </div>
         </Providers>
       </body>

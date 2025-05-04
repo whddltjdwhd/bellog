@@ -3,7 +3,7 @@ import FooterLink from "./FooterLink";
 
 export default function Footer() {
   return (
-    <footer className="w-full  mb-8 mt-16 sm:mt-36 text-center">
+    <footer className="w-[1010px] mb-8 mt-16 sm:mt-36 text-center">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mx-auto">
         <p className="text-sm text-[var(--text)]">
           © castle_bell · All rights reserved
