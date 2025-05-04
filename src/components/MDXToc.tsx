@@ -100,7 +100,7 @@ const MDXToc = () => {
         const isActive = currentId === section.id;
         const activeColor = isActive ? "text-sky-500 dark:text-sky-400" : color;
         const styles = [
-          "transition-colors duration-200 ease-in-out hover:text-[var(--link)]",
+          "transition-colors duration-200 ease-in-out hover:text-[var(--link)] cursor-pointer",
           indent,
           fontSize,
           activeColor,
