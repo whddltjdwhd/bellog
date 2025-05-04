@@ -1,76 +1,140 @@
 "use client";
-import { useEffect, useState } from "react";
+
+import { useEffect, useState, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { getIntersectionObserver } from "@/lib/observer";
+import GithubSlugger from "github-slugger";
+import { Section } from "@/types";
 
 const MDXToc = () => {
   const pathname = usePathname();
   const [currentId, setCurrentId] = useState<string>("");
-  const [headingEls, setHeadingEls] = useState<Element[]>([]);
+  const [headingSections, setHeadingSections] = useState<Section[]>([]);
+  const scrolled = useRef(false);
 
   useEffect(() => {
-    const observer = getIntersectionObserver(setCurrentId);
-    const mainContent = document.querySelector("main");
-    const headingElements = mainContent
-      ? Array.from(mainContent.querySelectorAll("h2, h3"))
-      : [];
-    setHeadingEls(headingElements);
+    const main = document.querySelector("main");
+    if (!main) return;
 
-    headingElements.forEach((header) => {
-      observer.observe(header);
+    const headings = Array.from(
+      main.querySelectorAll<HTMLHeadingElement>("h2, h3, h4")
+    );
+    const slugger = new GithubSlugger();
+    const MARGIN = 90;
+
+    const sections: Section[] = headings.map((header, idx) => {
+      if (!header.id && header.textContent) {
+        header.id = slugger.slug(header.textContent);
+      }
+
+      const headerMap = {
+        H2: 1,
+        H3: 2,
+        H4: 3,
+      };
+      const depth = headerMap[header.tagName as keyof typeof headerMap] as
+        | 1
+        | 2
+        | 3;
+      const top = header.offsetTop - MARGIN;
+
+      const next = headings[idx + 1];
+      const bottom = next
+        ? next.offsetTop - MARGIN
+        : document.body.scrollHeight;
+
+      return { id: header.id, top, bottom, depth };
     });
 
-    return () => {
-      headingElements.forEach((header) => {
-        observer.unobserve(header);
-      });
-    };
+    if (sections.length) {
+      setHeadingSections(sections);
+      const hash = window.location.hash.replace("#", "");
+      setCurrentId(hash || sections[0].id);
+    }
   }, [pathname]);
 
-  if (headingEls.length === 0) {
-    return null;
-  }
+  useEffect(() => {
+    if (!headingSections.length) return;
+
+    const onScroll = () => {
+      if (scrolled.current) return;
+
+      scrolled.current = true;
+      requestAnimationFrame(() => {
+        const pos = window.scrollY;
+        const found = headingSections.find(
+          (section) => pos >= section.top && pos < section.bottom
+        );
+
+        if (found && found.id !== currentId) {
+          setCurrentId(found.id);
+          history.replaceState(null, "", `#${found.id}`);
+        }
+        scrolled.current = false;
+      });
+    };
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [headingSections, currentId]);
+
+  if (!headingSections.length) return null;
 
   return (
     <nav className="max-h-[calc(100vh-120px)] overflow-y-auto pl-4 border-l border-[var(--border)]">
-      <div className="flex flex-col gap-2">
-        <h4 className="font-semibold mb-3 text-sm text-gray-500 dark:text-gray-400">
-          On this page
-        </h4>
-        {headingEls.map((h, i) =>
-          h.nodeName === "H2" ? (
-            <div
-              key={`${h.id}-${i}`}
-              data-depth="1"
-              data-active={currentId === h.id}
-              className={`text-sm text-gray-500 dark:text-gray-400 transition-colors duration-200 ease-in-out hover:text-gray-900 dark:hover:text-gray-100 pl-0 ${
-                currentId === h.id
-                  ? "text-sky-500 dark:text-sky-400 font-medium"
-                  : ""
-              }`}
+      <h3 className="font-semibold mb-3 text-sm text-gray-500 dark:text-gray-400">
+        On this page
+      </h3>
+      {headingSections.map((section) => {
+        let indent = "py-[5px]";
+        let fontSize = "text-lg";
+        const color = "text-gray-400";
+
+        if (section.depth === 2) {
+          indent = "py-[3px] pl-4";
+          fontSize = "text-md";
+        } else if (section.depth === 3) {
+          indent = "py-[2px] pl-8";
+          fontSize = "text-sm";
+        }
+
+        const isActive = currentId === section.id;
+        const activeColor = isActive ? "text-sky-500 dark:text-sky-400" : color;
+        const styles = [
+          "transition-colors duration-200 ease-in-out hover:text-[var(--link)]",
+          indent,
+          fontSize,
+          activeColor,
+        ].join(" ");
+
+        return (
+          <div
+            key={section.id}
+            data-depth={section.depth}
+            data-active={isActive}
+            className={styles}
+          >
+            <a
+              href={`#${section.id}`}
+              className="block"
+              onClick={(e) => {
+                e.preventDefault();
+                const header = document.getElementById(section.id);
+
+                if (!header) return;
+                window.scrollTo({
+                  top: header.offsetTop - 90,
+                  behavior: "smooth",
+                });
+
+                setCurrentId(section.id);
+                history.pushState(null, "", `#${section.id}`);
+              }}
             >
-              <a href={`#${h.id}`} className="block">
-                {h.textContent}
-              </a>
-            </div>
-          ) : (
-            <div
-              key={`${h.id}-${i}`}
-              data-depth="2"
-              data-active={currentId === h.id}
-              className={`text-sm text-gray-500 dark:text-gray-400 transition-colors duration-200 ease-in-out hover:text-gray-900 dark:hover:text-gray-100 pl-4 ${
-                currentId === h.id
-                  ? "text-sky-500 dark:text-sky-400 font-medium"
-                  : ""
-              }`}
-            >
-              <a href={`#${h.id}`} className="block">
-                {h.textContent}
-              </a>
-            </div>
-          )
-        )}
-      </div>
+              {document.getElementById(section.id)?.textContent}
+            </a>
+          </div>
+        );
+      })}
     </nav>
   );
 };
