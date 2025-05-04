@@ -39,12 +39,10 @@ export default function RootLayout({
       <body className="bg-[var(--bg)]">
         <Providers>
           <Navbar />
-          <div className="flex flex-col items-center justify-center w-full">
-            <div className="w-full max-w-[1010px] p-5 mx-auto">
-              {children}
-              <Analytics />
-              <SpeedInsights />
-            </div>
+          <div className="mx-auto w-full max-w-[1100px]">
+            {children}
+            <Analytics />
+            <SpeedInsights />
           </div>
         </Providers>
       </body>
