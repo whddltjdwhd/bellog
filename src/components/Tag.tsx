@@ -1,17 +1,13 @@
 "use client";
 
+import { TagProps } from "@/types";
 import React from "react";
-
-interface TagProps {
-  tagName: string;
-  variant?: "large" | "small";
-  selected?: boolean;
-}
 
 export default function Tag({
   tagName,
   variant = "small",
   selected = false,
+  counts,
 }: TagProps) {
   const baseClass =
     "rounded-full text-center cursor-pointer transition-colors duration-200 max-w-full w-fit truncate";
@@ -29,7 +25,18 @@ export default function Tag({
     ? `${selectedBg} ${selectedText}`
     : `${unselectedBg} ${unselectedText}`;
 
+  const shouldShowCount = counts !== undefined && counts > 0;
+
   return (
-    <div className={`${baseClass} ${sizeClass} ${colorClass}`}>{tagName}</div>
+    <div
+      className={`${baseClass} ${sizeClass} ${colorClass} flex items-center gap-1`}
+    >
+      {tagName}
+      {shouldShowCount && (
+        <span className={`rounded-full text-[10px] sm:text-xs px-1 py-0.5 `}>
+          {counts}
+        </span>
+      )}
+    </div>
   );
 }

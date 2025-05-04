@@ -54,7 +54,7 @@ export default function PostCard({ post }: PostCardProps) {
           >
             {post.date.slice(2)}
           </p>
-          <Tag tagName={post.tag} />
+          <Tag tagName={post.tag} counts={-1} />
         </div>
       </Link>
     </li>
