@@ -9,7 +9,7 @@ interface LayoutProps {
 
 export default function PageLayout({ children }: LayoutProps) {
   return (
-    <>
+    <div className="w-full flex flex-col justify-center items-center">
       <ReadingProgress />
       <div className="relative grid grid-cols-1 md:grid-cols-12 gap-4">
         <div className="hidden md:block md:col-span-2"></div>
@@ -19,6 +19,6 @@ export default function PageLayout({ children }: LayoutProps) {
         </aside>
       </div>
       <Footer />
-    </>
+    </div>
   );
 }
