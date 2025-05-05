@@ -1,3 +1,4 @@
+import Footer from "@/components/Footer";
 import PostList from "@/components/PostList";
 import TagList from "@/components/TagList";
 
@@ -27,9 +28,10 @@ export default async function Page({ searchParams }: PageProps) {
   }));
 
   return (
-    <div className="w-full flex flex-col gap-[5px] mt-[30px]">
+    <div className="w-full max-w-[1010px] flex flex-col gap-[5px] mt-[30px]">
       <TagList tags={tagsWithCounts} />
       <PostList posts={filteredPosts} />
+      <Footer />
     </div>
   );
 }

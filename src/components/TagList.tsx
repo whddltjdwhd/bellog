@@ -15,7 +15,7 @@ export default function TagList({ tags }: TagListProps) {
   const totalPostsCount = tags.reduce((sum, tag) => sum + tag.counts, 0);
 
   return (
-    <div className="mb-6 flex flex-wrap gap-2">
+    <div className="mb-6 flex flex-wrap gap-2 px-2">
       <Link href={`/posts`}>
         <Tag
           tagName="ALL"

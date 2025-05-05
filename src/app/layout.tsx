@@ -39,7 +39,7 @@ export default function RootLayout({
       <body className="bg-[var(--bg)] w-full flex flex-col justify-center items-center">
         <Providers>
           <Navbar />
-          <div className="w-full max-w-[1250px] flex flex-col justify-center items-center">
+          <div className="w-full flex flex-col justify-center items-center">
             {children}
             <Analytics />
             <SpeedInsights />
