@@ -1,15 +1,34 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import GithubSlugger from "github-slugger";
-import { Section } from "@/types";
+import { headerDepth, Section } from "@/types";
+import { throttle } from "es-toolkit";
 
 const MDXToc = () => {
-  const pathname = usePathname();
   const [currentId, setCurrentId] = useState<string>("");
   const [headingSections, setHeadingSections] = useState<Section[]>([]);
-  const scrolled = useRef(false);
+
+  const slugger = new GithubSlugger();
+  const MARGIN = 90;
+
+  const headerMap = {
+    H2: 1,
+    H3: 2,
+    H4: 3,
+  };
+
+  const onScroll = throttle(() => {
+    const pos = window.scrollY;
+    const found = headingSections.find(
+      (section) => pos >= section.top && pos < section.bottom
+    );
+
+    if (found && found.id !== currentId) {
+      setCurrentId(found.id);
+    }
+  }, 16);
 
   useEffect(() => {
     const main = document.querySelector("main");
@@ -18,25 +37,17 @@ const MDXToc = () => {
     const headings = Array.from(
       main.querySelectorAll<HTMLHeadingElement>("h2, h3, h4")
     );
-    const slugger = new GithubSlugger();
-    const MARGIN = 90;
 
     const sections: Section[] = headings.map((header, idx) => {
       if (!header.id && header.textContent) {
         header.id = slugger.slug(header.textContent);
       }
 
-      const headerMap = {
-        H2: 1,
-        H3: 2,
-        H4: 3,
-      };
-      const depth = headerMap[header.tagName as keyof typeof headerMap] as
-        | 1
-        | 2
-        | 3;
-      const top = header.offsetTop - MARGIN;
+      const depth = headerMap[
+        header.tagName as keyof typeof headerMap
+      ] as headerDepth;
 
+      const top = header.offsetTop - MARGIN;
       const next = headings[idx + 1];
       const bottom = next
         ? next.offsetTop - MARGIN
@@ -47,35 +58,20 @@ const MDXToc = () => {
 
     if (sections.length) {
       setHeadingSections(sections);
-      const hash = window.location.hash.replace("#", "");
-      setCurrentId(hash || sections[0].id);
+      const pos = window.scrollY;
+      const found = sections.find(
+        (section) => pos >= section.top && pos < section.bottom
+      );
+      setCurrentId(found?.id || sections[0].id);
     }
-  }, [pathname]);
+  }, []);
 
   useEffect(() => {
     if (!headingSections.length) return;
 
-    const onScroll = () => {
-      if (scrolled.current) return;
-
-      scrolled.current = true;
-      requestAnimationFrame(() => {
-        const pos = window.scrollY;
-        const found = headingSections.find(
-          (section) => pos >= section.top && pos < section.bottom
-        );
-
-        if (found && found.id !== currentId) {
-          setCurrentId(found.id);
-          history.replaceState(null, "", `#${found.id}`);
-        }
-        scrolled.current = false;
-      });
-    };
-
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [headingSections, currentId]);
+  }, [currentId]);
 
   if (!headingSections.length) return null;
 
@@ -127,7 +123,7 @@ const MDXToc = () => {
                 });
 
                 setCurrentId(section.id);
-                history.pushState(null, "", `#${section.id}`);
+                history.replaceState(null, "", `#${section.id}`);
               }}
             >
               {document.getElementById(section.id)?.textContent}
