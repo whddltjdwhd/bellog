@@ -14,9 +14,11 @@ export interface TagProps {
   counts: number;
 }
 
+export type headerDepth = 1 | 2 | 3;
+
 export interface Section {
   id: string;
   top: number;
   bottom: number;
-  depth: 1 | 2 | 3;
+  depth: headerDepth;
 }
