@@ -27,7 +27,7 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
                 <h3 className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-sky-500 dark:group-hover:text-sky-400 transition-colors">
                   {prev.title}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2 break-keep">
                   {prev.preview}
                 </p>
               </div>
@@ -50,7 +50,7 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
                 <h3 className="font-medium text-gray-900 dark:text-gray-100 group-hover:text-sky-500 dark:group-hover:text-sky-400 transition-colors">
                   {next.title}
                 </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2 break-keep">
                   {next.preview}
                 </p>
               </div>
