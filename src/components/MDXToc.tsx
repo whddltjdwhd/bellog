@@ -1,16 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import GithubSlugger from "github-slugger";
 import { headerDepth, Section } from "@/types";
-import { throttle } from "es-toolkit";
 import { usePathname } from "next/navigation";
 
 const MDXToc = () => {
   const [currentId, setCurrentId] = useState<string>("");
   const [headingSections, setHeadingSections] = useState<Section[]>([]);
-  const pathName = usePathname();
+  const pathname = usePathname();
+  const rafId = useRef<number | null>(null);
+  const isScheduled = useRef(false);
 
   const slugger = new GithubSlugger();
   const MARGIN = 90;
@@ -21,59 +22,90 @@ const MDXToc = () => {
     H4: 3,
   };
 
-  const onScroll = throttle(() => {
-    const pos = window.scrollY;
-    const found = headingSections.find(
-      (section) => pos >= section.top && pos < section.bottom
-    );
-
-    if (found && found.id !== currentId) {
-      setCurrentId(found.id);
+  const updateActiveSection = () => {
+    if (!headingSections.length) {
+      isScheduled.current = false;
+      return;
     }
-  }, 16);
 
-  useEffect(() => {
-    const main = document.querySelector(".mdx-content");
-    if (!main) return;
+    const scrollTop = window.pageYOffset;
 
-    const headings = Array.from(
-      main.querySelectorAll<HTMLHeadingElement>("h2, h3, h4")
-    );
-
-    const sections: Section[] = headings.map((header, idx) => {
-      if (!header.id && header.textContent) {
-        header.id = slugger.slug(header.textContent);
-      }
-
-      const depth = headerMap[
-        header.tagName as keyof typeof headerMap
-      ] as headerDepth;
-
-      const top = header.offsetTop - MARGIN;
-      const next = headings[idx + 1];
-      const bottom = next
-        ? next.offsetTop - MARGIN
-        : document.body.scrollHeight;
-
-      return { id: header.id, top, bottom, depth };
+    const activeSection = headingSections.find((section) => {
+      return scrollTop >= section.top && scrollTop < section.bottom;
     });
 
-    if (sections.length) {
-      setHeadingSections(sections);
-      const pos = window.scrollY;
-      const found = sections.find(
-        (section) => pos >= section.top && pos < section.bottom
-      );
-      setCurrentId(found?.id || sections[0].id);
+    if (activeSection && activeSection.id !== currentId) {
+      setCurrentId(activeSection.id);
+    } else if (!activeSection && currentId !== "") {
+      setCurrentId("");
     }
-  }, [pathName]);
+
+    isScheduled.current = false;
+  };
+
+  const onScroll = () => {
+    if (!isScheduled.current) {
+      isScheduled.current = true;
+      rafId.current = requestAnimationFrame(updateActiveSection);
+    }
+  };
+
+  useEffect(() => {
+    slugger.reset();
+
+    const updateToc = () => {
+      const main = document.querySelector(".mdx-content");
+      if (!main) return;
+
+      const headings = Array.from(
+        main.querySelectorAll<HTMLHeadingElement>("h2, h3, h4")
+      );
+
+      const sections: Section[] = headings.map((header, idx) => {
+        if (!header.id && header.textContent) {
+          header.id = slugger.slug(header.textContent);
+        }
+
+        const depth = headerMap[
+          header.tagName as keyof typeof headerMap
+        ] as headerDepth;
+
+        const top = header.offsetTop - MARGIN;
+        const next = headings[idx + 1];
+        const bottom = next
+          ? next.offsetTop - MARGIN - 1
+          : document.documentElement.scrollHeight;
+
+        return { id: header.id, top, bottom, depth };
+      });
+
+      if (sections.length) {
+        setHeadingSections(sections);
+        setCurrentId("");
+      } else {
+        setHeadingSections([]);
+        setCurrentId("");
+      }
+    };
+
+    const timeoutId = setTimeout(updateToc, 100);
+
+    return () => clearTimeout(timeoutId);
+  }, [pathname]);
 
   useEffect(() => {
     if (!headingSections.length) return;
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [currentId]);
+    updateActiveSection();
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (rafId.current !== null) {
+        cancelAnimationFrame(rafId.current);
+      }
+    };
+  }, [headingSections]);
 
   if (!headingSections.length) return null;
 
@@ -88,10 +120,10 @@ const MDXToc = () => {
         const color = "text-gray-400";
 
         if (section.depth === 2) {
-          indent = "py-[3px] pl-4";
+          indent = "py-[3px] pl-2";
           fontSize = "text-md";
         } else if (section.depth === 3) {
-          indent = "py-[2px] pl-8";
+          indent = "py-[2px] pl-4";
           fontSize = "text-sm";
         }
 
@@ -113,7 +145,7 @@ const MDXToc = () => {
           >
             <a
               href={`#${section.id}`}
-              className="block"
+              className="block break-keep"
               onClick={(e) => {
                 e.preventDefault();
                 const header = document.getElementById(section.id);
