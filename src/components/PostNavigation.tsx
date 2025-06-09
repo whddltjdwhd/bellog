@@ -17,14 +17,14 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
         {prev ? (
           <Link
             href={`/${prev.slug}`}
-            className="group flex-1 p-4 rounded-lg border border-[var(--border)] hover:border-[var(--primary)] hover:shadow-md transition-all duration-200"
+            className="group flex-1 p-4 rounded-lg border border-[var(--border)] hover:border-[var(--primary)] transition-all duration-200"
           >
             <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
               이전 글
             </div>
             <div className="flex items-center gap-2">
               <div>
-                <h3 className="font-medium text-[var(--text)] text-sm sm:text-base md:text-lg group-hover:text-[var(--primary)] transition-colors break-keep">
+                <h3 className="font-medium text-[var(--text)] text-sm sm:text-base md:text-lg transition-colors break-keep">
                   {prev.title}
                 </h3>
                 <p className="text-xs sm:text-sm text-[var(--accent)] mt-1 line-clamp-2 break-keep">
@@ -40,14 +40,14 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
         {next ? (
           <Link
             href={`/${next.slug}`}
-            className="group flex-1 p-4 rounded-lg border border-[var(--border)] hover:border-[var(--primary)] hover:shadow-md transition-all duration-200 text-right"
+            className="group flex-1 p-4 rounded-lg border border-[var(--border)] hover:border-[var(--primary)] transition-all duration-200 text-right"
           >
             <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
               다음 글
             </div>
             <div className="flex items-center justify-end gap-2">
               <div>
-                <h3 className="font-medium text-[var(--text)] text-sm sm:text-base md:text-lg group-hover:text-[var(--primary)] transition-colors break-keep">
+                <h3 className="font-medium text-[var(--text)] text-sm sm:text-base md:text-lg transition-colors break-keep">
                   {next.title}
                 </h3>
                 <p className="text-xs sm:text-sm text-[var(--accent)] mt-1 line-clamp-2 break-keep">
