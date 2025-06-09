@@ -33,3 +33,20 @@ export async function getPosts(): Promise<PostData[]> {
 
   return posts;
 }
+
+export async function getAdjacentPosts(currentSlug: string): Promise<{
+  prev: PostData | null;
+  next: PostData | null;
+}> {
+  const posts = await getPosts();
+  const currentIndex = posts.findIndex((post) => post.slug === currentSlug);
+
+  if (currentIndex === -1) {
+    return { prev: null, next: null };
+  }
+
+  return {
+    prev: currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null,
+    next: currentIndex > 0 ? posts[currentIndex - 1] : null,
+  };
+}

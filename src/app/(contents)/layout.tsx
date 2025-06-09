@@ -1,13 +1,13 @@
 import Footer from "@/components/Footer";
 import ReadingProgress from "@/components/ProgressBar";
-import React, { ReactNode } from "react";
 import MDXToc from "@/components/MDXToc";
+import React from "react";
 
-interface LayoutProps {
-  children: ReactNode;
-}
-
-export default function PageLayout({ children }: LayoutProps) {
+export default function ContentsLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="w-full flex flex-col justify-center items-center">
       <ReadingProgress />
