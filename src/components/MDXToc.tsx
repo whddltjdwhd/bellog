@@ -5,10 +5,12 @@ import { useEffect, useState } from "react";
 import GithubSlugger from "github-slugger";
 import { headerDepth, Section } from "@/types";
 import { throttle } from "es-toolkit";
+import { usePathname } from "next/navigation";
 
 const MDXToc = () => {
   const [currentId, setCurrentId] = useState<string>("");
   const [headingSections, setHeadingSections] = useState<Section[]>([]);
+  const pathName = usePathname();
 
   const slugger = new GithubSlugger();
   const MARGIN = 90;
@@ -31,7 +33,7 @@ const MDXToc = () => {
   }, 16);
 
   useEffect(() => {
-    const main = document.querySelector("main");
+    const main = document.querySelector(".mdx-content");
     if (!main) return;
 
     const headings = Array.from(
@@ -64,7 +66,7 @@ const MDXToc = () => {
       );
       setCurrentId(found?.id || sections[0].id);
     }
-  }, []);
+  }, [pathName]);
 
   useEffect(() => {
     if (!headingSections.length) return;

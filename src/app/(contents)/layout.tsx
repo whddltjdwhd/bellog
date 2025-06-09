@@ -15,7 +15,7 @@ export default function PageLayout({ children }: LayoutProps) {
       <div className="relative w-full max-w-[1200px] grid grid-cols-1 md:grid-cols-12 gap-4">
         <div className="hidden md:block md:col-span-2"></div>
         <main className="py-8 px-4 md:col-span-8">
-          {children}
+          <article className="mdx-content">{children}</article>
           <PostNavigationClient />
         </main>
         <aside className="hidden md:block md:col-span-2 sticky top-20 h-fit py-8 pr-3">
