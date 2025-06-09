@@ -2,6 +2,7 @@
 
 :root {
   --bg: #f7f8f9;
+  --background: #fcfcfd;
   --surface: #fcfcfd;
   --text: #1a1d29;
   --primary: #059669;
@@ -14,6 +15,7 @@
 
 html.dark {
   --bg: #0f1b1e;
+  --background: #162427;
   --surface: #162427;
   --text: #e6f1f3;
   --primary: #00a38c;
@@ -27,6 +29,7 @@ html.dark {
 @media (prefers-color-scheme: dark) {
   :root:not(.light):not(.dark) {
     --bg: #0f1b1e;
+    --background: #162427;
     --surface: #162427;
     --text: #e6f1f3;
     --primary: #00a38c;

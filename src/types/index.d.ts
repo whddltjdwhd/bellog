@@ -7,6 +7,17 @@ export interface PostData {
   tag: string;
 }
 
+export interface ProjectData {
+  id: number;
+  title: string;
+  description: string;
+  websiteUrl: string;
+  githubUrl: string;
+  techStack: string[];
+  emoji: string;
+  image: string;
+}
+
 export interface TagProps {
   tagName: string;
   variant?: "large" | "small";
