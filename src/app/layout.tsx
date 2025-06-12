@@ -22,7 +22,7 @@ const myFont = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Bellog - Castle Bell's Blog",
+  title: "Bellog",
   description:
     "Castle Bell의 개발 블로그입니다. 프로그래밍, 기술 트렌드, 개발 경험을 공유합니다.",
   keywords: ["블로그", "개발", "프로그래밍", "기술", "Castle Bell"],
