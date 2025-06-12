@@ -109,7 +109,7 @@ export default function CodeBlock({ children }: CodeBlockProps): JSX.Element {
                   >
                     {lineNumber}
                   </span>
-                  <span>
+                  <span style={{ paddingRight: "30px" }}>
                     {line.map((token, key) => (
                       <span key={key} {...getTokenProps({ token })} />
                     ))}
