@@ -116,15 +116,15 @@ const MDXToc = () => {
       </h3>
       {headingSections.map((section) => {
         let indent = "py-[5px]";
-        let fontSize = "text-lg";
+        let fontSize = "text-md";
         const color = "text-gray-400";
 
         if (section.depth === 2) {
           indent = "py-[3px] pl-2";
-          fontSize = "text-md";
+          fontSize = "text-sm";
         } else if (section.depth === 3) {
           indent = "py-[2px] pl-4";
-          fontSize = "text-sm";
+          fontSize = "text-xs";
         }
 
         const isActive = currentId === section.id;

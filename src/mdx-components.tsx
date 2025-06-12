@@ -15,14 +15,14 @@ const H1 = (props: React.HTMLAttributes<HTMLHeadingElement>) => (
 
 const H2 = (props: React.HTMLAttributes<HTMLHeadingElement>) => (
   <h2
-    className="text-[var(--text)] text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold my-6"
+    className="text-[var(--text)] text-xl md:text-2xl lg:text-3xl font-semibold my-6"
     {...props}
   />
 );
 
 const H3 = (props: React.HTMLAttributes<HTMLHeadingElement>) => (
   <h3
-    className="text-[var(--text)] text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold my-5"
+    className="text-[var(--text)] text-lg md:text-2xl lg:text-2xl font-semibold my-5"
     {...props}
   />
 );
