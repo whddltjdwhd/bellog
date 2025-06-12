@@ -63,10 +63,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google:
-      "google-site-verification=SXIljXlCPJQ-cxW5MLhfpYK8PdD_e1EbPFi1wjdDRR4",
-  },
   icons: {
     icon: "/icon.png",
   },
