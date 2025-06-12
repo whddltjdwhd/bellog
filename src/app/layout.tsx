@@ -22,8 +22,51 @@ const myFont = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Bellog",
-  description: "Castle Bell's Blog",
+  title: "Bellog - Castle Bell's Blog",
+  description:
+    "Castle Bell의 개발 블로그입니다. 프로그래밍, 기술 트렌드, 개발 경험을 공유합니다.",
+  keywords: ["블로그", "개발", "프로그래밍", "기술", "Castle Bell"],
+  authors: [{ name: "Castle Bell" }],
+  creator: "Castle Bell",
+  publisher: "Bellog",
+  openGraph: {
+    title: "Bellog",
+    description:
+      "Castle Bell의 개발 블로그입니다. 프로그래밍, 기술 트렌드, 개발 경험을 공유합니다.",
+    url: "https://www.castle-bell.site/",
+    siteName: "Bellog",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Bellog 블로그",
+      },
+    ],
+    locale: "ko_KR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Bellog",
+    description: "Castle Bell의 개발 블로그입니다.",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  verification: {
+    google:
+      "google-site-verification=SXIljXlCPJQ-cxW5MLhfpYK8PdD_e1EbPFi1wjdDRR4",
+  },
   icons: {
     icon: "/icon.png",
   },
