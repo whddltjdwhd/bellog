@@ -1,6 +1,6 @@
 export const meta = {
   emoji: "🫡",
-  title: "키오스쿨 실시간 주문 상세 모달 버그 해결기",
+  title: "주문 상세 모달 스크롤 버그와 이벤트 버블링",
   date: "2025-04-17",
   preview: "React 이벤트 버블링 원인 분석 및 클릭 영역 확장 적용 사례",
   tag: "Kioschool",
@@ -19,9 +19,9 @@ export const meta = {
 
 ## 왜 이런 일이 발생했을까?
 
-우선 modal을 렌더링하는 `OrderDetailModalButton` 컴포넌트를 살펴보자.
+우선 modal을 렌더링하는 `OrderDetailModalButton` 컴포넌트를 살펴보자. `useModal`훅에서 모달 관련 함수 및 변수들을 받아와서 사용하고 있다.
 
-```tsx,title=OrderDetailModalButton
+```tsx,title=OrderDetailModalButton,{2,5,10,12}
 function OrderDetailModalButton({ order }: Props) {
   const { isModalOpen, openModal, closeModal, modalKey } = useModal();
 
@@ -45,9 +45,9 @@ function OrderDetailModalButton({ order }: Props) {
 export default OrderDetailModalButton;
 ```
 
-`useModal`훅에서 모달 관련 함수 및 변수들을 받아와서 사용하고 있다. 이제 `useModal` 훅을 살펴보자.
+이제 `useModal` 훅을 살펴보자. `openModal`에서 `overflow: hidden`을 주고, `closeModal`에서 `overflow: auto`를 주고 있다. 스크롤이 잠긴다는 건, `closeModal`이 호출되지 않았다는 의미다. 확인해보니, 주문 상태 변경 버튼에 `closeModal` 호출이 빠져 있었다. 이를 추가하니 버그는 해결이 됐다!
 
-```tsx,title=useModalHook
+```tsx,title=useModalHook,{8,14}
 function useModal() {
   const modalKey = "modal-root";
   const [isModalOpen, setModalOpen] = useState(false);
@@ -70,11 +70,9 @@ function useModal() {
 export default useModal;
 ```
 
-`openModal`에서 `overflow: hidden`을 주고, `closeModal`에서 `overflow: auto`를 주고 있다. 스크롤이 잠긴다는 건, `closeModal`이 호출되지 않았다는 의미다. 확인해보니, 주문 상태 변경 버튼에 `closeModal` 호출이 빠져 있었다. 이를 추가하니 첫번째 버그는 해결이 됐다!
-
 ## 모달을 트리거하는 범위를 확장해 달라는 요청
 
-추가적으로 ‘>’ 아이콘에서 `OrderCard` 컴포넌트 주요 영역 전체로 클릭 범위를 넓여달라는 요구가 있었다.
+그러나 여기서 끝이 아니었다. 추가적으로 ‘>’ 아이콘에서 `OrderCard` 컴포넌트 주요 영역 전체로 클릭 범위를 넓여달라는 요구가 있었다.
 
 <MDXImage
   src="/images/react-bubbling/react-bubbling1.png"

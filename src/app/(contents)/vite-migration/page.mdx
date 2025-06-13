@@ -173,7 +173,7 @@ Cold Start 시간은 **98.17%**, 빌드하여 배포하는 시간은 **50.91%** 
 
 ### vite.config.ts 파일에서 오류가 발생해요
 
-PR을 리뷰해준 지인이에게 다음과 같은 에러가 발생했다. 에러 메세지를 분석해보면 지인이 환경에서 는 vite.config.ts 파일을 common JS로 인식하고 있다. 그래서 vite-tsconfig-paths라는 플러그인을 불러오기 위해 내부적으로 require()를 호출하려고 했지만, vite-tsconfig-paths는 ESM 방식을 취하기에 에러가 발생하는 것이었다.
+PR을 리뷰해준 지인이에게 다음과 같은 에러가 발생했다. 에러 메세지를 분석해보면 지인이 환경에서는 vite.config.ts 파일을 common JS로 인식하고 있다. 그래서 vite-tsconfig-paths라는 플러그인을 불러오기 위해 내부적으로 require()를 호출하려고 했지만, vite-tsconfig-paths는 ESM 방식을 취하기에 에러가 발생하는 것이었다.
 
 <MDXImage
   src="/images/vite-migration/vite-migration6.png"

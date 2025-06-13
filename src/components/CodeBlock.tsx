@@ -93,7 +93,7 @@ export default function CodeBlock({ children }: CodeBlockProps): JSX.Element {
                   style={{
                     display: "flex",
                     background: isHighlighted
-                      ? "rgba(255,255,255,0.07)"
+                      ? "rgba(255,255,255,0.1)"
                       : "transparent",
                   }}
                 >
@@ -103,8 +103,9 @@ export default function CodeBlock({ children }: CodeBlockProps): JSX.Element {
                       width: 50,
                       textAlign: "end",
                       padding: "0 15px 0 10px",
-                      opacity: 0.5,
+                      color: isHighlighted ? "#e7b364" : "#a0a0a0",
                       flexShrink: 0,
+                      borderLeft: isHighlighted ? "5px solid #feb84e" : "none",
                     }}
                   >
                     {lineNumber}
