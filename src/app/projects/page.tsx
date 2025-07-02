@@ -1,6 +1,6 @@
 import React from "react";
-import ProjectCard from "@/components/ProjectCard";
 import { ProjectData } from "@/types";
+import ProjectCard from "@/components/projects/ProjectCard";
 
 const projects: ProjectData[] = [
   {

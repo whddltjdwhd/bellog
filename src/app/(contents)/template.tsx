@@ -1,7 +1,7 @@
+import MiddleFooter from "@/components/common/MiddleFooter";
+import GiscusComments from "@/components/posts/GiscusComments";
+import PostNavigationWrapper from "@/components/posts/PostNavigationWrapper";
 import { getPosts } from "@/lib/posts";
-import PostNavigationWrapper from "@/components/PostNavigationWrapper";
-import GiscusComments from "@/components/GiscusComments";
-import MiddleFooter from "@/components/MiddleFooter";
 
 interface TemplateProps {
   children: React.ReactNode;

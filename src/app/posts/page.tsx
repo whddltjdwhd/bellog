@@ -1,7 +1,6 @@
-import Footer from "@/components/Footer";
-import PostList from "@/components/PostList";
-import TagList from "@/components/TagList";
-
+import Footer from "@/components/common/Footer";
+import PostList from "@/components/posts/PostList";
+import TagList from "@/components/ui/TagList";
 import { getPosts } from "@/lib/posts";
 import { calculateTagCounts } from "@/lib/tags";
 

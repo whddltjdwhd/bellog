@@ -1,10 +1,10 @@
 import type { MDXComponents } from "mdx/types";
 import React from "react";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import CodeBlock from "./components/CodeBlock";
-import MDXImage from "./components/MDXImage";
-import MDXVideo from "./components/MDXVideo";
+import Header from "./components/common/Header";
+import Footer from "./components/common/Footer";
+import CodeBlock from "./components/mdx/CodeBlock";
+import MDXImage from "./components/mdx/MDXImage";
+import MDXVideo from "./components/mdx/MDXVideo";
 
 const H1 = (props: React.HTMLAttributes<HTMLHeadingElement>) => (
   <h1

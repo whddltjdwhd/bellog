@@ -1,6 +1,6 @@
-import Footer from "@/components/Footer";
-import Intro from "@/components/Intro";
-import PostList from "@/components/PostList";
+import Footer from "@/components/common/Footer";
+import Intro from "@/components/common/Intro";
+import PostList from "@/components/posts/PostList";
 import { getPosts } from "@/lib/posts";
 
 export default async function Home() {

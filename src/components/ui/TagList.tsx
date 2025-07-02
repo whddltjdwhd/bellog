@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import Link from "next/link";
-import Tag from "@/components/Tag";
 import { useSearchParams } from "next/navigation";
 import { TagProps } from "@/types";
+import Tag from "./Tag";
 
 interface TagListProps {
   tags: TagProps[];

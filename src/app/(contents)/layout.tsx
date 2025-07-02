@@ -1,6 +1,6 @@
-import Footer from "@/components/Footer";
-import ReadingProgress from "@/components/ProgressBar";
-import MDXToc from "@/components/MDXToc";
+import Footer from "@/components/common/Footer";
+import ReadingProgress from "@/components/common/ProgressBar";
+import MDXToc from "@/components/mdx/MDXToc";
 import React from "react";
 
 export default function ContentsLayout({

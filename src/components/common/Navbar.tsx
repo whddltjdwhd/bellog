@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import NavItem from "./NavItem";
-import ThemeToggle from "./ThemeToggle";
+import ThemeToggle from "../ui/ThemeToggle";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);

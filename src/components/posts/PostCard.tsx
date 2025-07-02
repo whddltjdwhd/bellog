@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
-import Tag from "@/components/Tag";
 import { PostData } from "@/types";
+import Tag from "../ui/Tag";
 
 interface PostCardProps {
   post: PostData;
