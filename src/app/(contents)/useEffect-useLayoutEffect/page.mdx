@@ -1,0 +1,76 @@
+export const meta = {
+  emoji: "💁",
+  title: "useEffect와 useLayoutEffect",
+  date: "2025-07-27",
+  preview: "useEffect와 useLayoutEffect의 차이점과 사용 사례",
+  tag: "React",
+};
+
+<Header {...meta} />
+
+## useEffect는?
+
+useEffect는 React의 기본적인 hook중 하나이다. 해당 훅은 React 렌더링이 완료된 후, useEffect 내부의 콜백 함수를 실행한다. 보통 비동기 요청, 무거운 연산 등을 해당 콜백 함수 안에서 **비동기적**으로 실행한다. 그래서 콜백 안의 로직이 렌더링을 블락하지 않고, 이로인해 사용자는 빠른 초기 화면을 볼 수 있게 된다.
+
+useLayoutEffect는 useEffect와 다른 점이 있다. 그것은 바로 콜백 함수 실행 타이밍이다. 그 전에 React의 렌더링 과정에 대해서 간단히 짚고 넘어가보자.
+
+## React 렌더링 단계
+
+React18버젼 이전에는 렌더링 단계가 동기적이어서 무거운 연산이 진행중일때 사용자가 input을 입력하면 이것이 반영이 안되는 현상이 발생했다.
+
+React는 18버젼 이후 동시성 렌더링이 도입됐다. 렌더링 페이즈가 2부분으로 나뉨으로써 비동기적인 렌더링을 할 수 있게 됐다. 렌더 페이즈는 가상 돔을 이용해 이전 돔과 업데이트된 돔의 바뀐 부분을 가상돔에 반영하는 단계이다. 이 단계는 비동기적이며 도중에 우선순위에 따라 중단될 수 있다. 커밋 페이즈는 업데이트가 이루어진 가상돔을 실제 돔에 반영하는 단계이다. 이 단계는 동기적이며 중단될 수 없다.
+
+## useLayoutEffect?
+
+useLayoutEffect는 렌더 단계가 끝난 이후, 커밋 단계 중, 화면을 그리기 전에 콜백 함수를 **동기적으로** 실행한다. 이렇게 함으로써 화면 반짝임을 막을 수 있다. 그러나, 이때 막을 수 있는 화면 반짝임은 “동기적”인 화면 변화만 해당된다. 다음 코드를 보자.
+
+```tsx,title=useLayoutEffect예시
+// useEffect 사용시 사용자는 count가 1인 화면을 처음부터 보게된다.
+// 이후, useEffect 콜백 함수가 실행되면서, count가 2인 화면으로 리렌더링 된다.
+const [count, setCount] = useState(1);
+
+useEffect(() => {
+  setCount(2);
+}, []);
+
+// useLayoutEffect 사용시 사용자는 count가 2인 화면을 처음부터 보게된다.
+const [count, setCount] = useState(1);
+
+useLayoutEffect(() => {
+  setCount(2);
+}, []);
+```
+
+여기서 화면 반짝임이란, count가 1인 상태로 먼저 그려지고, 그 다음에 useEffect의 콜백 함수가 실해되어 setCount(2)가 실행되고, count가 2로 바뀌면서 리렌더링이 일어난다. 이것은 아주 찰나의 시간에 이루어지고 사용자는 화면이 반짝하는 듯한 느낌을 받게된다.
+
+만약, 비동기 호출에 관해서도 useEffect와 useLayoutEffect는 차이가 있을까??
+
+```tsx,title=async로직
+// 맨 처음엔 아무것도 보이지 않다가 fetch된 데이터가 불러와지면 해당 데이터를 볼 수 있게 된다.
+const [user, setUser] = useState(null);
+
+useEffect(() => {
+  fetch("/user/info")
+    .then((response) => response.json())
+    .then((data) => setUser(data));
+}, []);
+
+// 사용자는 fetch된 데이터를 처음부터 보게될까?
+const [user, setUser] = useState(null);
+
+useLayoutEffect(() => {
+  fetch("/user/info")
+    .then((response) => response.json())
+    .then((data) => setUser(data));
+}, []);
+```
+
+정답은 useEffect, useLayoutEffect 둘 다 동일한 결과를 갖게 된다. 그 이유는, useLayoutEffect는 콜백 함수를 커밋 페이즈 중에 실행할 뿐, 비동기 요청이 다 끝날때까지 기다리진 않는다.
+
+fetch가 호출되면 실제 네트워크 요청은 브라우저의 별도의 스레드로 넘어가고, useLayoutEffect의 콜백 함수는 즉시 종료된다. 이후 렌더링과 페인팅은 그대로 진행되고, 네트워크 응답이 언제 올지는 useLayoutEffect의 실행 시점과 무관하게 네트워크 속도에 달려있다. 따라서 데이터가 도착한 후에 상태를 변경하는 시점은 두 훅 모두 동일하기 때문에 사용자 경험에 차이가 없다.
+
+## 그럼 useEffect대신 useLayoutEffect를 사용??
+
+이렇게 보면 useEffect대신 useLayoutEffect를 사용하는게 좋아보인다. 그러나, 대부분의 경우에선 useEffect를 사용하는게 권장된다. 그 이유는 콜백함수를 비동기적으로 실행하는지, 동기적으로 실행하는지에 대한 차이가 존재하기 때문이다. 만약 useLayoutEffect 콜백 함수 로직이 매우 무겁다면, 첫 화면이 그려지기까지 시간이 지연될 수 있다. 이는 성능 저하의 원인이 될 수 있으므로, 화면 레이아웃과 직접적으로 관련된 DOM 계산이나 조작이 필요해서 '화면 반짝임'을 반드시 막아야 하는 특별한 경우가 아니라면 useEffect 사용이 권장된다.
+
+useLayoutEffect가 정말 필요한 경우는 렌더링된 후 특정 요소의 너비(width)나 높이(height)를 가져와서 다른 요소의 스타일을 변경해야 할 때이다. useEffect를 쓰면 초기 스타일로 한번 그려진 후, 측정값에 따른 스타일로 다시 그려지면서 레이아웃이 흔들리는 현상이 발생할 수 있다. 반면, useLayoutEffect는 페인트 전에 이 모든 계산과 스타일 변경을 끝내고 최종 결과물만 보여주게 되어 레이아웃이 흔들리는 현상을 막을 수 있다.
