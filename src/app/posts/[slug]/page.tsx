@@ -4,15 +4,18 @@ import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import { Metadata } from "next";
 
-import GiscusComments from "@/components/posts/GiscusComments";
-import PostNavigation from "@/components/posts/PostNavigation";
 import { getAdjacentPosts, getPostBySlug, getAllPosts } from "@/lib/posts";
-import { useMDXComponents } from "@/mdx-components";
 import MDXToc from "@/components/mdx/MDXToc";
+import { getMDXComponents } from "@/mdx-components";
+import PostNavigation from "@/components/posts/PostNavigation";
+import GiscusComments from "@/components/posts/GiscusComments";
 
 // Function to generate dynamic metadata for each post
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const slug = params.slug;
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const awaitedParams = await params;
+  const slug = awaitedParams.slug;
   const post = await getPostBySlug(slug);
 
   if (!post) {
@@ -56,7 +59,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-
 export async function generateStaticParams() {
   const posts = await getAllPosts();
 
@@ -66,9 +68,9 @@ export async function generateStaticParams() {
 }
 
 interface PageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export default async function Page({ params }: PageProps) {
@@ -81,7 +83,7 @@ export default async function Page({ params }: PageProps) {
   }
 
   const { prev, next } = await getAdjacentPosts(slug);
-  const components = useMDXComponents({});
+  const components = getMDXComponents({});
 
   return (
     <article className="w-full flex flex-col justify-center items-center">

@@ -4,7 +4,6 @@ import clsx from "clsx";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import CodeBlock from "./components/mdx/CodeBlock";
-import MDXImage from "./components/mdx/MDXImage";
 import MDXVideo from "./components/mdx/MDXVideo";
 
 const H1 = (props: React.HTMLAttributes<HTMLHeadingElement>) => (
@@ -128,7 +127,7 @@ const LineBreak = (props: React.HTMLAttributes<HTMLBRElement>) => (
   <br className="m-96" {...props} />
 );
 
-export function useMDXComponents(components: MDXComponents): MDXComponents {
+export function getMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: H1,
     h2: H2,
@@ -151,7 +150,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     br: LineBreak,
     Header,
     Footer,
-    MDXImage,
     MDXVideo,
     ...components,
   };
