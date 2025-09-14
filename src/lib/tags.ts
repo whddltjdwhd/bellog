@@ -1,8 +1,10 @@
-import { PostData } from "@/types";
+import { Post } from "@/types";
 
-export function calculateTagCounts(posts: PostData[]) {
+export function calculateTagCounts(posts: Post[]) {
   return posts.reduce((acc: Record<string, number>, post) => {
-    acc[post.tag] = (acc[post.tag] || 0) + 1;
+    post.tags.forEach(tag => {
+      acc[tag] = (acc[tag] || 0) + 1;
+    });
     return acc;
   }, {});
 }
