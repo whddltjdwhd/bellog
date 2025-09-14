@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PostData } from "@/types";
+import { Post } from "@/types";
 
 interface PostNavigationProps {
   prev: PostData | null;
@@ -16,7 +16,7 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
       <div className="flex flex-col sm:flex-row justify-between gap-4">
         {prev ? (
           <Link
-            href={`/${prev.slug}`}
+            href={`/posts/${prev.slug}`}
             className="group flex-1 p-4 rounded-lg border border-[var(--border)] hover:border-[var(--primary)] transition-all duration-200"
           >
             <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
@@ -39,7 +39,7 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
 
         {next ? (
           <Link
-            href={`/${next.slug}`}
+            href={`/posts/${next.slug}`}
             className="group flex-1 p-4 rounded-lg border border-[var(--border)] hover:border-[var(--primary)] transition-all duration-200 text-right"
           >
             <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
