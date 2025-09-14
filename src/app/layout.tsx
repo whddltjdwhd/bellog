@@ -5,7 +5,6 @@ import Providers from "./providers";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Navbar from "@/components/common/Navbar";
-import ScrollProgress from "@/components/common/ProgressBar";
 
 const myFont = localFont({
   src: [
@@ -100,7 +99,6 @@ export default function RootLayout({
       <body className="bg-[var(--bg)] w-full flex flex-col justify-center items-center">
         <Providers>
           <Navbar />
-          <ScrollProgress />
 
           <div className="w-full flex flex-col justify-center items-center">
             {children}
