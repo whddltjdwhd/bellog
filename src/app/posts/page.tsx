@@ -1,29 +1,29 @@
 import Footer from "@/components/common/Footer";
 import PostList from "@/components/posts/PostList";
 import TagList from "@/components/ui/TagList";
-import { getPosts } from "@/lib/posts";
+import { getAllPosts } from "@/lib/posts";
 import { calculateTagCounts } from "@/lib/tags";
 
 import React from "react";
 
 interface PageProps {
-  searchParams: Promise<{ tag?: string }>;
+  searchParams: { tag?: string };
 }
 
 export default async function Page({ searchParams }: PageProps) {
-  const params = await searchParams;
-  const posts = await getPosts();
-  const tags = Array.from(new Set(posts.map((post) => post.tag)));
+  const { tag } = searchParams;
+  const posts = await getAllPosts();
+  const allTags = Array.from(new Set(posts.flatMap((post) => post.tags)));
 
-  const filteredPosts = params.tag
-    ? posts.filter((post) => post.tag === params.tag)
+  const filteredPosts = tag
+    ? posts.filter((post) => post.tags.includes(tag))
     : posts;
 
   const tagCounts = calculateTagCounts(posts);
 
-  const tagsWithCounts = tags.map((tag) => ({
-    tagName: tag,
-    counts: Number(tagCounts[tag]) || 0,
+  const tagsWithCounts = allTags.map((tagName) => ({
+    tagName,
+    counts: Number(tagCounts[tagName]) || 0,
   }));
 
   return (
