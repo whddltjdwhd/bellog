@@ -26,7 +26,7 @@ const notion = new Client({
 });
 
 const notionX = new NotionAPI({
-  authToken: process.env.NOTION_API_KEY,
+  authToken: process.env.NOTION_TOKEN_V2,
 });
 
 export const getAllPostsFromNotion = async (): Promise<Post[]> => {
