@@ -6,6 +6,7 @@ export interface Post {
   tags: string[];
   description: string;
   status: string;
+  content: string;
 }
 
 export interface ProjectData {
