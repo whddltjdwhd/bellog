@@ -1,6 +1,6 @@
-import { Post } from "@/types";
+import { Post } from '@/types';
 
-import { getAllPostsFromNotion, getPostRecordMap } from "./notion";
+import { getAllPostsFromNotion, getPostContent } from './notion';
 
 export async function getAllPosts(): Promise<Post[]> {
   const posts = await getAllPostsFromNotion();
@@ -16,11 +16,11 @@ export async function getPostBySlug(slug: string) {
     return null;
   }
 
-  const recordMap = await getPostRecordMap(post.id);
+  const { content } = await getPostContent(post.id);
 
   return {
     ...post,
-    recordMap,
+    content,
   };
 }
 

@@ -1,13 +1,12 @@
-export type PostStatus = "draft" | "published" | "archived";
-
 export interface Post {
   id: string;
+  slug: string;
   title: string;
   date: string;
-  description: string;
-  slug: string;
   tags: string[];
-  status: PostStatus;
+  description: string;
+  status: string;
+  content: string;
 }
 
 export interface ProjectData {
@@ -26,11 +25,6 @@ export interface TagProps {
   variant?: "large" | "small";
   selected?: boolean;
   counts: number;
-}
-
-export interface AdjacentPosts {
-  prev: Post | null;
-  next: Post | null;
 }
 
 export type headerDepth = 1 | 2 | 3;

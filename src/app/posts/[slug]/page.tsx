@@ -1,18 +1,21 @@
 import { notFound } from "next/navigation";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import rehypeSlug from "rehype-slug";
+import remarkGfm from "remark-gfm";
 import { Metadata } from "next";
 
 import { getAdjacentPosts, getPostBySlug, getAllPosts } from "@/lib/posts";
+import MDXToc from "@/components/mdx/MDXToc";
+import { getMDXComponents } from "@/mdx-components";
 import PostNavigation from "@/components/posts/PostNavigation";
 import GiscusComments from "@/components/posts/GiscusComments";
-import PostRenderer from "@/components/posts/PostRenderer";
-import NotionToc from "@/components/posts/NotionToc";
-import ScrollProgress from "@/components/common/ProgressBar";
 
 // Function to generate dynamic metadata for each post
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
+  const awaitedParams = await params;
+  const slug = awaitedParams.slug;
   const post = await getPostBySlug(slug);
 
   if (!post) {
@@ -71,7 +74,8 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  const { slug } = await params;
+  const awaitedParams = await params;
+  const slug = awaitedParams.slug;
   const post = await getPostBySlug(slug);
 
   if (!post) {
@@ -79,10 +83,10 @@ export default async function Page({ params }: PageProps) {
   }
 
   const { prev, next } = await getAdjacentPosts(slug);
+  const components = getMDXComponents({});
 
   return (
     <article className="w-full flex flex-col justify-center items-center">
-      <ScrollProgress />
       <section className="relative w-full max-w-[1300px] grid grid-cols-1 md:grid-cols-12 gap-4">
         <div className="hidden md:block md:col-span-2"></div>
         <main className="py-8 px-4 md:col-span-8">
@@ -100,12 +104,23 @@ export default async function Page({ params }: PageProps) {
               ))}
             </div>
           </header>
-          <PostRenderer recordMap={post.recordMap} />
+          <div className="prose dark:prose-invert max-w-none">
+            <MDXRemote
+              source={post.content}
+              components={components}
+              options={{
+                mdxOptions: {
+                  remarkPlugins: [remarkGfm],
+                  rehypePlugins: [rehypeSlug],
+                },
+              }}
+            />
+          </div>
           <PostNavigation prev={prev} next={next} />
           <GiscusComments />
         </main>
         <aside className="hidden md:block md:col-span-2 sticky top-20 h-fit py-8 pr-3">
-          <NotionToc recordMap={post.recordMap} />
+          <MDXToc content={post.content} />
         </aside>
       </section>
     </article>
