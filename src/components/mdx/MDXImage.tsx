@@ -38,12 +38,22 @@ export async function getImageMetadata(src: string): Promise<ImageMetadata> {
 export default async function MDXImage({ src, alt }: MDXImageProps) {
   const imageMetadata = await getImageMetadata(src);
 
+  const maxWidth = 700;
+  let newWidth = imageMetadata.width;
+  let newHeight = imageMetadata.height;
+
+  if (newWidth > maxWidth) {
+    const aspectRatio = newHeight / newWidth;
+    newWidth = maxWidth;
+    newHeight = Math.round(newWidth * aspectRatio);
+  }
+
   return (
     <Image
       src={src}
       alt={alt || ""}
-      width={imageMetadata.width}
-      height={imageMetadata.height}
+      width={newWidth}
+      height={newHeight}
       placeholder={imageMetadata.blurDataURL ? "blur" : "empty"}
       blurDataURL={imageMetadata.blurDataURL}
       style={{
