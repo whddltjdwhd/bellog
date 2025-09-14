@@ -1,3 +1,5 @@
+"use client";
+
 import React, { isValidElement, JSX } from "react";
 import { Highlight, themes } from "prism-react-renderer";
 import { parseMeta } from "@/lib/utils";
