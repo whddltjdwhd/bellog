@@ -5,7 +5,15 @@ import { Post } from "@/types";
 
 const notion = new Client({
   auth: process.env.NOTION_API_KEY,
-  fetch: fetch,
+  fetch: (url, options) => {
+    return fetch(url, {
+      ...options,
+      next: {
+        ...((options as any)?.next || {}),
+        tags: ["posts"],
+      },
+    });
+  },
 });
 
 const n2m = new NotionToMarkdown({ notionClient: notion });
