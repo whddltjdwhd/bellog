@@ -2,12 +2,60 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
+import { Metadata } from "next";
 
 import GiscusComments from "@/components/posts/GiscusComments";
 import PostNavigation from "@/components/posts/PostNavigation";
 import { getAdjacentPosts, getPostBySlug, getAllPosts } from "@/lib/posts";
 import { useMDXComponents } from "@/mdx-components";
 import MDXToc from "@/components/mdx/MDXToc";
+
+// Function to generate dynamic metadata for each post
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const slug = params.slug;
+  const post = await getPostBySlug(slug);
+
+  if (!post) {
+    return {
+      title: "게시물을 찾을 수 없습니다",
+      description: "요청하신 게시물을 찾을 수 없습니다.",
+    };
+  }
+
+  const title = post.title;
+  const description = post.description;
+  const postUrl = `https://www.castle-bell.site/posts/${slug}`;
+
+  return {
+    title: title,
+    description: description,
+    openGraph: {
+      title: title,
+      description: description,
+      url: postUrl,
+      type: "article",
+      images: [
+        {
+          url: "https://www.castle-bell.site/og-image.png",
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: title,
+      description: description,
+      images: ["https://www.castle-bell.site/og-image.png"],
+    },
+    alternates: {
+      canonical: postUrl,
+    },
+    keywords: post.tags.join(", "),
+  };
+}
+
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
