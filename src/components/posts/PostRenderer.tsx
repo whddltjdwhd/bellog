@@ -5,10 +5,6 @@ import { useTheme } from "next-themes";
 import { ExtendedRecordMap } from "notion-types";
 
 import { useState, useEffect } from "react";
-import { Code } from "react-notion-x/build/third-party/code";
-import { Equation } from "react-notion-x/build/third-party/equation";
-import { Modal } from "react-notion-x/build/third-party/modal";
-import { Pdf } from "react-notion-x/build/third-party/pdf";
 
 // core styles shared by all of react-notion-x (required)
 import "react-notion-x/src/styles.css";
@@ -21,6 +17,30 @@ import "prism-themes/themes/prism-material-oceanic.css";
 
 // used for rendering equations (optional)
 import "katex/dist/katex.min.css";
+
+import dynamic from "next/dynamic";
+
+const Code = dynamic(() =>
+  import("react-notion-x/build/third-party/code").then((m) => m.Code)
+);
+
+const Equation = dynamic(() =>
+  import("react-notion-x/build/third-party/equation").then((m) => m.Equation)
+);
+
+const Pdf = dynamic(
+  () => import("react-notion-x/build/third-party/pdf").then((m) => m.Pdf),
+  {
+    ssr: false,
+  }
+);
+
+const Modal = dynamic(
+  () => import("react-notion-x/build/third-party/modal").then((m) => m.Modal),
+  {
+    ssr: false,
+  }
+);
 
 interface PostRendererProps {
   recordMap: ExtendedRecordMap;
