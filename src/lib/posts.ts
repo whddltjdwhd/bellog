@@ -36,7 +36,7 @@ export async function getAdjacentPosts(currentSlug: string): Promise<{
   }
 
   return {
-    prev: currentIndex > 0 ? posts[currentIndex - 1] : null,
-    next: currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null,
+    prev: currentIndex < posts.length - 1 ? posts[currentIndex + 1] : null,
+    next: currentIndex > 0 ? posts[currentIndex - 1] : null,
   };
 }
