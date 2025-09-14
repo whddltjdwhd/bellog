@@ -2,10 +2,10 @@
 
 import { usePathname } from "next/navigation";
 import PostNavigation from "./PostNavigation";
-import { PostData } from "@/types";
+import { Post } from "@/types";
 
 interface PostNavigationWrapperProps {
-  posts: PostData[];
+  posts: Post[];
 }
 
 export default function PostNavigationWrapper({

@@ -2,8 +2,8 @@ import Link from "next/link";
 import { Post } from "@/types";
 
 interface PostNavigationProps {
-  prev: PostData | null;
-  next: PostData | null;
+  prev: Post | null;
+  next: Post | null;
 }
 
 export default function PostNavigation({ prev, next }: PostNavigationProps) {
@@ -28,7 +28,7 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
                   {prev.title}
                 </h3>
                 <p className="text-xs sm:text-sm text-[var(--accent)] mt-1 line-clamp-2 break-keep">
-                  {prev.preview}
+                  {prev.description}
                 </p>
               </div>
             </div>
@@ -51,7 +51,7 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
                   {next.title}
                 </h3>
                 <p className="text-xs sm:text-sm text-[var(--accent)] mt-1 line-clamp-2 break-keep">
-                  {next.preview}
+                  {next.description}
                 </p>
               </div>
             </div>

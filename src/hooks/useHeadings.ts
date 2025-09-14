@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { remark } from "remark";
 import { visit } from "unist-util-visit";
 import GithubSlugger from "github-slugger";
+import type { Root, Heading, PhrasingContent } from "mdast";
 import { Section, headerDepth } from "@/types";
 
 const slugger = new GithubSlugger();
@@ -19,10 +20,12 @@ export const useHeadings = (content: string) => {
     const extractedHeadings: Section[] = [];
 
     remark()
-      .use(() => (tree) => {
-        visit(tree, "heading", (node: any) => {
+      .use(() => (tree: Root) => {
+        visit(tree, "heading", (node: Heading) => {
           const text = node.children
-            .map((child: any) => ("value" in child ? child.value : ""))
+            .map((child: PhrasingContent) =>
+              "value" in child ? child.value : ""
+            )
             .join("");
           const id = slugger.slug(text);
 
