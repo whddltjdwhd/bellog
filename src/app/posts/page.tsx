@@ -7,11 +7,12 @@ import { calculateTagCounts } from "@/lib/tags";
 import React from "react";
 
 interface PageProps {
-  searchParams: { tag?: string };
+  searchParams: Promise<{ tag?: string }>;
 }
 
 export default async function Page({ searchParams }: PageProps) {
-  const { tag } = searchParams;
+  const awaitedSearchParams = await searchParams;
+  const { tag } = awaitedSearchParams;
   const posts = await getAllPosts();
   const allTags = Array.from(new Set(posts.flatMap((post) => post.tags)));
 
