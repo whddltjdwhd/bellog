@@ -1,12 +1,13 @@
 import { MetadataRoute } from "next";
-import { getPosts } from "@/lib/posts";
+import { Post } from "@/types";
+import { getAllPosts } from "@/lib/posts";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://www.castle-bell.site/";
 
-  const posts = await getPosts();
+  const posts = await getAllPosts();
 
-  const postUrls = posts.map((post) => ({
+  const postUrls = posts.map((post: Post) => ({
     url: `${baseUrl}/posts/${post.slug}`,
     lastModified: new Date(post.date),
     changeFrequency: "weekly" as const,

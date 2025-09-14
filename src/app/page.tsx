@@ -1,10 +1,10 @@
 import Footer from "@/components/common/Footer";
 import Intro from "@/components/common/Intro";
 import PostList from "@/components/posts/PostList";
-import { getPosts } from "@/lib/posts";
+import { getAllPosts } from "@/lib/posts";
 
 export default async function Home() {
-  const posts = await getPosts();
+  const posts = await getAllPosts();
   const slicedPosts = posts.slice(0, 5);
 
   return (

@@ -1,9 +1,9 @@
 import type { MDXComponents } from "mdx/types";
 import React from "react";
+import clsx from "clsx";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import CodeBlock from "./components/mdx/CodeBlock";
-import MDXImage from "./components/mdx/MDXImage";
 import MDXVideo from "./components/mdx/MDXVideo";
 
 const H1 = (props: React.HTMLAttributes<HTMLHeadingElement>) => (
@@ -86,12 +86,20 @@ const OrderedList = (props: React.OlHTMLAttributes<HTMLOListElement>) => (
   <ol className="text-[var(--text)] list-decimal pl-6 my-2" {...props} />
 );
 
-const ListItem = (props: React.HTMLAttributes<HTMLLIElement>) => (
-  <li
-    className="my-1 break-words overflow-wrap-anywhere max-w-full"
-    {...props}
-  />
-);
+const ListItem = (props: React.HTMLAttributes<HTMLLIElement>) => {
+  const isTaskListItem = props.className?.includes("task-list-item");
+
+  return (
+    <li
+      {...props}
+      className={clsx(
+        "my-1 break-words overflow-wrap-anywhere max-w-full",
+        isTaskListItem && "list-none",
+        props.className
+      )}
+    />
+  );
+};
 
 const Hr = (props: React.HTMLAttributes<HTMLHRElement>) => (
   <hr className="mb-3 border-t border-[var(--border)]" {...props} />
@@ -119,7 +127,7 @@ const LineBreak = (props: React.HTMLAttributes<HTMLBRElement>) => (
   <br className="m-96" {...props} />
 );
 
-export function useMDXComponents(components: MDXComponents): MDXComponents {
+export function getMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: H1,
     h2: H2,
@@ -142,7 +150,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     br: LineBreak,
     Header,
     Footer,
-    MDXImage,
     MDXVideo,
     ...components,
   };

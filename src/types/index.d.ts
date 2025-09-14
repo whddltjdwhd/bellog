@@ -1,10 +1,12 @@
-export interface PostData {
+export interface Post {
+  id: string;
   slug: string;
-  emoji: string;
   title: string;
   date: string;
-  preview: string;
-  tag: string;
+  tags: string[];
+  description: string;
+  status: string;
+  content: string;
 }
 
 export interface ProjectData {
@@ -29,7 +31,6 @@ export type headerDepth = 1 | 2 | 3;
 
 export interface Section {
   id: string;
-  top: number;
-  bottom: number;
+  text: string;
   depth: headerDepth;
 }

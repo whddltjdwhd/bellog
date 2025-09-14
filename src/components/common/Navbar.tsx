@@ -27,7 +27,6 @@ export default function Navbar() {
         </NavItem>
 
         <div className="hidden sm:flex gap-4 items-center mr-4">
-          <NavItem href="/about">About</NavItem>
           <NavItem href="/projects">Projects</NavItem>
         </div>
 

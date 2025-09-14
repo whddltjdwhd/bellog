@@ -56,77 +56,10 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-      typography: {
-        DEFAULT: {
-          css: {
-            color: "hsl(var(--foreground))",
-            a: {
-              color: "hsl(var(--primary))",
-              textDecoration: "underline",
-              "&:hover": {
-                color: "hsl(var(--accent-foreground))",
-              },
-            },
-            h1: {
-              color: "hsl(var(--foreground))",
-              fontWeight: "700",
-            },
-            h2: {
-              color: "hsl(var(--foreground))",
-              fontWeight: "600",
-            },
-            h3: {
-              color: "hsl(var(--foreground))",
-              fontWeight: "600",
-            },
-            strong: {
-              color: "hsl(var(--foreground))",
-            },
-            hr: {
-              borderColor: "hsl(var(--border))",
-            },
-            blockquote: {
-              borderLeftColor: "hsl(var(--border))",
-              color: "hsl(var(--muted-foreground))",
-              fontStyle: "normal",
-            },
-            code: {
-              color: "hsl(var(--accent-foreground))",
-              backgroundColor: "hsl(var(--muted))",
-              padding: "0.25rem 0.5rem",
-              borderRadius: "0.25rem",
-            },
-            pre: {
-              color: "hsl(var(--foreground))",
-              backgroundColor: "hsl(var(--muted))",
-              padding: "1rem",
-              borderRadius: "0.5rem",
-              overflowX: "auto",
-            },
-          },
-        },
-        dark: {
-          css: {
-            color: "hsl(var(--foreground))",
-            a: {
-              color: "hsl(var(--primary))",
-              "&:hover": {
-                color: "hsl(var(--accent-foreground))",
-              },
-            },
-            blockquote: {
-              color: "hsl(var(--muted-foreground))",
-              borderLeftColor: "hsl(var(--border))",
-            },
-            hr: {
-              borderColor: "hsl(var(--border))",
-            },
-          },
-        },
-      },
+      
     },
   },
-  plugins: [animate],
+  plugins: [animate, require("@tailwindcss/typography")],
 };
 
 export default config;

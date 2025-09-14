@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { PostData } from "@/types";
+import { Post } from "@/types";
 
 interface PostNavigationProps {
-  prev: PostData | null;
-  next: PostData | null;
+  prev: Post | null;
+  next: Post | null;
 }
 
 export default function PostNavigation({ prev, next }: PostNavigationProps) {
@@ -16,7 +16,7 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
       <div className="flex flex-col sm:flex-row justify-between gap-4">
         {prev ? (
           <Link
-            href={`/${prev.slug}`}
+            href={`/posts/${prev.slug}`}
             className="group flex-1 p-4 rounded-lg border border-[var(--border)] hover:border-[var(--primary)] transition-all duration-200"
           >
             <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
@@ -28,7 +28,7 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
                   {prev.title}
                 </h3>
                 <p className="text-xs sm:text-sm text-[var(--accent)] mt-1 line-clamp-2 break-keep">
-                  {prev.preview}
+                  {prev.description}
                 </p>
               </div>
             </div>
@@ -39,7 +39,7 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
 
         {next ? (
           <Link
-            href={`/${next.slug}`}
+            href={`/posts/${next.slug}`}
             className="group flex-1 p-4 rounded-lg border border-[var(--border)] hover:border-[var(--primary)] transition-all duration-200 text-right"
           >
             <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
@@ -51,7 +51,7 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
                   {next.title}
                 </h3>
                 <p className="text-xs sm:text-sm text-[var(--accent)] mt-1 line-clamp-2 break-keep">
-                  {next.preview}
+                  {next.description}
                 </p>
               </div>
             </div>

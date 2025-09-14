@@ -1,31 +1,22 @@
 import React from "react";
 import Link from "next/link";
-import { PostData } from "@/types";
+import { Post } from "@/types";
 import Tag from "../ui/Tag";
 
 interface PostCardProps {
-  post: PostData;
+  post: Post;
 }
 
 export default function PostCard({ post }: PostCardProps) {
   return (
     <li>
       <Link
-        href={`/${post.slug}`}
+        href={`/posts/${post.slug}`}
         className="flex flex-col md:flex-row items-start md:items-center justify-between
                    rounded-2xl max-w-full p-3 md:p-4 transition-all duration-150
                    hover:bg-[var(--border)]"
       >
         <div className="flex w-full md:w-5/6 items-center">
-          {post.emoji && (
-            <span
-              aria-hidden
-              className="mr-2 md:mr-4 text-3xl md:text-4xl lg:text-5xl"
-            >
-              {post.emoji}
-            </span>
-          )}
-
           <div className="flex flex-col flex-1 min-w-0">
             <h2
               className="truncate font-bold text-[var(--text)]
@@ -38,7 +29,7 @@ export default function PostCard({ post }: PostCardProps) {
               className="truncate mt-1 text-sm md:text-base lg:text-lg
                               text-[var(--text)]"
             >
-              {post.preview}
+              {post.description}
             </span>
           </div>
         </div>
@@ -52,9 +43,13 @@ export default function PostCard({ post }: PostCardProps) {
             className="text-[10px] md:text-xs lg:text-[11px]
                         text-[var(--text)]"
           >
-            {post.date.slice(2)}
+            {post.date}
           </p>
-          <Tag tagName={post.tag} counts={-1} />
+          <div className="flex gap-1">
+            {post.tags.map(tag => (
+              <Tag key={tag} tagName={tag} counts={-1} />
+            ))}
+          </div>
         </div>
       </Link>
     </li>
