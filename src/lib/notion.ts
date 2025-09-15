@@ -25,10 +25,7 @@ const notion = new Client({
   },
 });
 
-const notionX = new NotionAPI({
-  activeUser: process.env.NOTION_ACTIVE_USER,
-  authToken: process.env.NOTION_TOKEN_V2,
-});
+const notionX = new NotionAPI();
 
 export const getAllPostsFromNotion = async (): Promise<Post[]> => {
   const databaseId = process.env.NOTION_DATABASE_ID;
