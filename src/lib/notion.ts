@@ -6,23 +6,8 @@ import {
   QueryDatabaseResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 
-type NextFetchRequestInit = RequestInit & {
-  next?: {
-    [key: string]: unknown;
-  };
-};
-
 const notion = new Client({
   auth: process.env.NOTION_API_KEY,
-  fetch: (url, options) => {
-    return fetch(url, {
-      ...options,
-      next: {
-        ...((options as NextFetchRequestInit)?.next || {}),
-        tags: ["posts"],
-      },
-    });
-  },
 });
 
 const notionX = new NotionAPI();
@@ -97,8 +82,11 @@ export const getAllPostsFromNotion = async (): Promise<Post[]> => {
 };
 
 export const getPostRecordMap = async (pageId: string) => {
-  console.log("Starting getPostRecordMap for pageId:", pageId);
-  const recordMap = await notionX.getPage(pageId);
-  console.log("Finished getPostRecordMap for pageId:", pageId);
+  const recordMap = await notionX.getPage(pageId, {
+    chunkLimit: 1,
+    fetchMissingBlocks: false,
+    fetchCollections: false,
+    signFileUrls: false,
+  });
   return recordMap;
 };
