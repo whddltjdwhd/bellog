@@ -100,6 +100,8 @@ export const getAllPostsFromNotion = async (): Promise<Post[]> => {
 };
 
 export const getPostRecordMap = async (pageId: string) => {
+  console.log("Starting getPostRecordMap for pageId:", pageId);
   const recordMap = await notionX.getPage(pageId);
+  console.log("Finished getPostRecordMap for pageId:", pageId);
   return recordMap;
 };
