@@ -6,11 +6,29 @@ import {
   QueryDatabaseResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 
+type NextFetchRequestInit = RequestInit & {
+  next?: {
+    [key: string]: unknown;
+  };
+};
+
 const notion = new Client({
   auth: process.env.NOTION_API_KEY,
+  fetch: (url, options) => {
+    return fetch(url, {
+      ...options,
+      next: {
+        ...((options as NextFetchRequestInit)?.next || {}),
+        tags: ["posts"],
+      },
+    });
+  },
 });
 
-const notionX = new NotionAPI();
+const notionX = new NotionAPI({
+  activeUser: process.env.NOTION_ACTIVE_USER,
+  authToken: process.env.NOTION_TOKEN_V2,
+});
 
 export const getAllPostsFromNotion = async (): Promise<Post[]> => {
   const databaseId = process.env.NOTION_DATABASE_ID;
@@ -82,11 +100,6 @@ export const getAllPostsFromNotion = async (): Promise<Post[]> => {
 };
 
 export const getPostRecordMap = async (pageId: string) => {
-  const recordMap = await notionX.getPage(pageId, {
-    chunkLimit: 6,
-    fetchMissingBlocks: true,
-    fetchCollections: false,
-    signFileUrls: true,
-  });
+  const recordMap = await notionX.getPage(pageId);
   return recordMap;
 };
