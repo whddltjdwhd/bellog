@@ -1,19 +1,27 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 
-import { getAdjacentPosts, getPostBySlug } from "@/lib/posts";
+import { getAllPosts } from "@/lib/posts";
 import PostNavigation from "@/components/posts/PostNavigation";
 import GiscusComments from "@/components/posts/GiscusComments";
 import PostRenderer from "@/components/posts/PostRenderer";
 import NotionToc from "@/components/posts/NotionToc";
 import ScrollProgress from "@/components/common/ProgressBar";
+import { getPostRecordMap } from "@/lib/notion";
 
-// Function to generate dynamic metadata for each post
+export async function generateStaticParams() {
+  const posts = await getAllPosts();
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
+}
+
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const posts = await getAllPosts();
+  const post = posts.find((p) => p.slug === slug);
 
   if (!post) {
     return {
@@ -64,13 +72,19 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const allPosts = await getAllPosts();
+  const postIndex = allPosts.findIndex((p) => p.slug === slug);
 
-  if (!post) {
+  if (postIndex === -1) {
     return notFound();
   }
 
-  const { prev, next } = await getAdjacentPosts(slug);
+  const post = allPosts[postIndex];
+  const nextPost = postIndex > 0 ? allPosts[postIndex - 1] : null;
+  const prevPost =
+    postIndex < allPosts.length - 1 ? allPosts[postIndex + 1] : null;
+
+  const recordMap = await getPostRecordMap(post.id);
 
   return (
     <article className="w-full flex flex-col justify-center items-center">
@@ -92,12 +106,12 @@ export default async function Page({ params }: PageProps) {
               ))}
             </div>
           </header>
-          <PostRenderer recordMap={post.recordMap} />
-          <PostNavigation prev={prev} next={next} />
+          <PostRenderer recordMap={recordMap} />
+          <PostNavigation prev={prevPost} next={nextPost} />
           <GiscusComments />
         </main>
         <aside className="hidden md:block md:col-span-2 sticky top-20 h-fit py-8 pr-3">
-          <NotionToc recordMap={post.recordMap} />
+          <NotionToc recordMap={recordMap} />
         </aside>
       </section>
     </article>
