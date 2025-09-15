@@ -83,10 +83,10 @@ export const getAllPostsFromNotion = async (): Promise<Post[]> => {
 
 export const getPostRecordMap = async (pageId: string) => {
   const recordMap = await notionX.getPage(pageId, {
-    chunkLimit: 1,
-    fetchMissingBlocks: false,
+    chunkLimit: 6,
+    fetchMissingBlocks: true,
     fetchCollections: false,
-    signFileUrls: false,
+    signFileUrls: true,
   });
   return recordMap;
 };
