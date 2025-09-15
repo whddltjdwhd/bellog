@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 
-import { getAdjacentPosts, getPostBySlug, getAllPosts } from "@/lib/posts";
+import { getAdjacentPosts, getPostBySlug } from "@/lib/posts";
 import PostNavigation from "@/components/posts/PostNavigation";
 import GiscusComments from "@/components/posts/GiscusComments";
 import PostRenderer from "@/components/posts/PostRenderer";
