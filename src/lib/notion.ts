@@ -7,28 +7,8 @@ import {
   QueryDatabaseResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 
-/**
- * Next.js의 fetch에 사용되는 RequestInit의 확장 타입입니다.
- * 'next' 객체를 포함하여 캐싱 및 재검증 옵션을 지정할 수 있습니다.
- */
-type NextFetchRequestInit = RequestInit & {
-  next?: {
-    [key: string]: unknown; // tags, revalidate 등을 포함할 수 있도록 유연하게 설정
-  };
-};
-
 const notion = new Client({
   auth: process.env.NOTION_API_KEY,
-  fetch: (url, options) => {
-    return fetch(url, {
-      ...options,
-      next: {
-        // 'any' 대신 정의한 타입을 사용하여 'options'의 타입을 구체화합니다.
-        ...((options as NextFetchRequestInit)?.next || {}),
-        tags: ["posts"],
-      },
-    });
-  },
 });
 
 const n2m = new NotionToMarkdown({ notionClient: notion });
