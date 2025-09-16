@@ -6,23 +6,8 @@ import {
   QueryDatabaseResponse,
 } from "@notionhq/client/build/src/api-endpoints";
 
-type NextFetchRequestInit = RequestInit & {
-  next?: {
-    [key: string]: unknown;
-  };
-};
-
 const notion = new Client({
   auth: process.env.NOTION_API_KEY,
-  fetch: (url, options) => {
-    return fetch(url, {
-      ...options,
-      next: {
-        ...((options as NextFetchRequestInit)?.next || {}),
-        tags: ["posts"],
-      },
-    });
-  },
 });
 
 const notionX = new NotionAPI({

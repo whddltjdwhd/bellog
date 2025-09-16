@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,11 +16,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "Invalid secret" }, { status: 401 });
     }
 
+    const pageId = body.entity.id;
+    console.log("Notion Page ID from Webhook:", pageId);
     // Assuming the webhook payload from Notion indicates a change,
-    // we revalidate the 'posts' tag.
-    revalidateTag("posts");
+    // we revalidate the 'posts' path.
+    revalidatePath("/", "page");
+    revalidatePath("/posts", "page");
+    revalidatePath(`/posts/${pageId}`, "page");
 
-    return NextResponse.json({ revalidated: true, now: Date.now() });
+    return NextResponse.json("Revalidation triggered");
   } catch (error) {
     console.error("Error in revalidate route:", error);
     return NextResponse.json(
