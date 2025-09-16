@@ -58,6 +58,8 @@ const PostRenderer = ({ recordMap }: PostRendererProps) => {
 
   return (
     <NotionRenderer
+      pageTitle={false}
+      disableHeader={true}
       recordMap={recordMap}
       fullPage={true}
       darkMode={isDarkMode}
