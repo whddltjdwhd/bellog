@@ -1,7 +1,7 @@
 import { Post } from "@/types";
 import { cache } from "react";
 
-import { getAllPostsFromNotion, getPostRecordMap } from "./notion";
+import { getAllPostsFromNotion, getPostBySlugFromNotion } from "./notion";
 
 export const getAllPosts = cache(async (): Promise<Post[]> => {
   const posts = await getAllPostsFromNotion();
@@ -10,19 +10,9 @@ export const getAllPosts = cache(async (): Promise<Post[]> => {
 });
 
 export async function getPostBySlug(slug: string) {
-  const posts = await getAllPosts();
-  const post = posts.find((p) => p.slug === slug);
+  const post = await getPostBySlugFromNotion(slug);
 
-  if (!post) {
-    return null;
-  }
-
-  const recordMap = await getPostRecordMap(post.id);
-
-  return {
-    ...post,
-    recordMap,
-  };
+  return post;
 }
 
 
