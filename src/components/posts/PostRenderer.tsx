@@ -1,6 +1,7 @@
 "use client";
 
 import { NotionRenderer } from "react-notion-x";
+import Image from "next/image";
 import { useTheme } from "next-themes";
 import { ExtendedRecordMap } from "notion-types";
 
@@ -19,6 +20,7 @@ import "prism-themes/themes/prism-material-oceanic.css";
 import "katex/dist/katex.min.css";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 const Code = dynamic(() =>
   import("react-notion-x/build/third-party/code").then((m) => m.Code)
@@ -65,6 +67,8 @@ const PostRenderer = ({ recordMap }: PostRendererProps) => {
       darkMode={isDarkMode}
       className="notion-container"
       components={{
+        nextLink: Link,
+        nextImage: Image,
         Code,
         Equation,
         Modal,
