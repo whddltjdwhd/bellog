@@ -13,6 +13,9 @@ const notion = new Client({
 const notionX = new NotionAPI({
   activeUser: process.env.NOTION_ACTIVE_USER,
   authToken: process.env.NOTION_TOKEN_V2,
+  kyOptions: {
+    mode: "cors",
+  },
 });
 
 export const getAllPostsFromNotion = async (): Promise<Post[]> => {
