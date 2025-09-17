@@ -1,21 +1,19 @@
-import remarkGfm from "remark-gfm";
-import remarkBreaks from "remark-breaks";
-import createMDX from "@next/mdx";
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Allow .mdx extensions for files
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
   images: {
     remotePatterns: [
-      new URL("https://www.notion.so/**"),
-      new URL("https://images.unsplash.com/**"),
-      new URL("https://abs.twimg.com/**"),
-      new URL("https://pbs.twimg.com/**"),
-      new URL("https://s3.us-west-2.amazonaws.com/**"),
-      new URL("https://s3.amazonaws.com/**"),
-      new URL("https://lh3.googleusercontent.com/**"),
+      { protocol: "https", hostname: "www.notion.so" },
+      { protocol: "https", hostname: "notion.so" },
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "abs.twimg.com" },
+      { protocol: "https", hostname: "pbs.twimg.com" },
+      { protocol: "https", hostname: "s3.us-west-2.amazonaws.com" },
     ],
+    formats: ["image/avif", "image/webp"],
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 };
 
