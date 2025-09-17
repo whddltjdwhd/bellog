@@ -5,6 +5,8 @@ import Image from "next/image";
 import { useTheme } from "next-themes";
 import { ExtendedRecordMap } from "notion-types";
 
+import { useState, useEffect } from "react";
+
 // core styles shared by all of react-notion-x (required)
 import "react-notion-x/src/styles.css";
 
@@ -48,8 +50,13 @@ interface PostRendererProps {
 
 const PostRenderer = ({ recordMap }: PostRendererProps) => {
   const { resolvedTheme } = useTheme();
+  const [isMounted, setIsMounted] = useState(false);
 
-  const isDarkMode = resolvedTheme === "dark";
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const isDarkMode = isMounted && resolvedTheme === "dark";
 
   return (
     <NotionRenderer
