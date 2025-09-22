@@ -16,13 +16,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "Invalid secret" }, { status: 401 });
     }
 
-    const pageId = body.entity.id;
-    console.log("Notion Page ID from Webhook:", pageId);
     // Assuming the webhook payload from Notion indicates a change,
     // we revalidate the 'posts' path.
-    revalidatePath("/", "page");
-    revalidatePath("/posts", "page");
-    revalidatePath(`/posts/${pageId}`, "page");
+    revalidatePath("/", "page");              // 홈페이지
+    revalidatePath("/posts", "page");         // 포스트 목록 페이지
+    revalidatePath("/posts/[slug]", "page");  // 모든 개별 포스트 페이지
 
     return NextResponse.json("Revalidation triggered");
   } catch (error) {
