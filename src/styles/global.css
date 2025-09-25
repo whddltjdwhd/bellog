@@ -2,7 +2,7 @@
 
 :root {
   --bg: #f7f8f9;
-  --background: #fcfcfd;
+  --background: #e5e5eb;
   --surface: #fcfcfd;
   --text: #1a1d29;
   --primary: #059669;
@@ -15,7 +15,7 @@
 
 html.dark {
   --bg: #0f1b1e;
-  --background: #162427;
+  --background: #1c2a2d;
   --surface: #162427;
   --text: #e6f1f3;
   --primary: #00a38c;
