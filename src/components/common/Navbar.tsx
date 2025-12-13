@@ -20,7 +20,7 @@ export default function Navbar() {
           flex items-center gap-6 px-6 py-3 rounded-full border transition-all duration-300
           ${
             isScrolled
-              ? "bg-background/80 backdrop-blur-xl border-border/40 shadow-lg"
+              ? "bg-background/80 backdrop-blur-xl border-border/40 shadow-lg dark:border-white/10 dark:shadow-[0_4px_20px_-5px_rgba(255,255,255,0.1)]"
               : "bg-background/50 backdrop-blur-md border-transparent shadow-sm"
           }
         `}
@@ -34,7 +34,6 @@ export default function Navbar() {
 
         <div className="flex gap-4 items-center">
           <NavItem href="/posts">Posts</NavItem>
-          <NavItem href="/projects">Projects</NavItem>
         </div>
 
         <div className="pl-4 border-l border-border/50">
