@@ -51,7 +51,7 @@ export default function ScrollProgress() {
         style={{
           width: `${progress}%`,
         }}
-        className="h-full bg-amber-600 will-change-[width]"
+        className="h-full bg-primary will-change-[width]"
       />
     </div>
   );

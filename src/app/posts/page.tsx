@@ -28,7 +28,7 @@ export default async function Page({ searchParams }: PageProps) {
   }));
 
   return (
-    <div className="w-full max-w-[1010px] flex flex-col gap-[5px] mt-[30px]">
+    <div className="w-full max-w-[1010px] flex flex-col gap-[5px] mt-[100px] mb-20 px-4">
       <TagList tags={tagsWithCounts} />
       <PostList posts={filteredPosts} />
       <Footer />

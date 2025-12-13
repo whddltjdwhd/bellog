@@ -91,19 +91,21 @@ export default async function Page({ params }: PageProps) {
   const recordMap = await getPostRecordMap(post.id);
 
   return (
-    <article className="w-full flex flex-col justify-center items-center">
+    <article className="w-full flex flex-col justify-center items-center mt-[100px] mb-20">
       <ScrollProgress />
       <section className="relative w-full max-w-[1300px] grid grid-cols-1 md:grid-cols-12 gap-4">
-        <div className="hidden md:block md:col-span-2"></div>
+        <div className="hidden md:block md:col-span-1"></div>
         <main className="py-8 px-4 md:col-span-8">
           <header className="w-full mb-8">
-            <h1 className="text-4xl font-bold mb-2">{post.title}</h1>
-            <p className="text-gray-500">{post.date}</p>
-            <div className="flex gap-2 mt-2">
+            <h1 className="text-4xl font-bold font-heading mb-4 text-foreground">
+              {post.title}
+            </h1>
+            <p className="text-muted-foreground">{post.date}</p>
+            <div className="flex gap-2 mt-4">
               {post.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="bg-gray-200 text-gray-800 px-2 py-1 rounded-md text-sm"
+                  className="px-2.5 py-0.5 rounded-full bg-secondary text-secondary-foreground text-sm font-medium border border-border/50"
                 >
                   {tag}
                 </span>
@@ -114,7 +116,7 @@ export default async function Page({ params }: PageProps) {
           <PostNavigation prev={prevPost} next={nextPost} />
           <GiscusComments />
         </main>
-        <aside className="hidden md:block md:col-span-2 sticky top-20 h-fit py-8 pr-3">
+        <aside className="hidden md:block md:col-span-3 sticky top-32 h-fit py-8 pr-3">
           <NotionToc recordMap={recordMap} />
         </aside>
       </section>

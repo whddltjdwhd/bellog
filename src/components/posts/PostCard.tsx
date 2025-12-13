@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import { Post } from "@/types";
-import Tag from "../ui/Tag";
 
 interface PostCardProps {
   post: Post;
@@ -9,46 +8,34 @@ interface PostCardProps {
 
 export default function PostCard({ post }: PostCardProps) {
   return (
-    <li>
+    <li className="break-inside-avoid">
       <Link
         href={`/posts/${post.slug}`}
-        className="flex flex-col md:flex-row items-start md:items-center justify-between
-                   rounded-2xl max-w-full p-3 md:p-4 transition-all duration-150
-                   hover:bg-[var(--border)]"
+        className="flex flex-col p-6 rounded-3xl bg-card border border-border/50 shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-md hover:border-primary/20 hover:bg-accent/40 group"
       >
-        <div className="flex w-full md:w-5/6 items-center">
-          <div className="flex flex-col flex-1 min-w-0">
-            <h2
-              className="truncate font-bold text-[var(--text)]
-                           text-xl md:text-2xl lg:text-3xl"
-            >
+        <div className="flex flex-col gap-3">
+          <div className="flex justify-between items-start">
+            <h2 className="font-heading font-bold text-xl md:text-2xl text-foreground line-clamp-2 group-hover:text-primary transition-colors">
               {post.title}
             </h2>
-
-            <span
-              className="truncate mt-1 text-sm md:text-base lg:text-lg
-                              text-[var(--text)]"
-            >
-              {post.description}
-            </span>
           </div>
-        </div>
 
-        <div
-          className="flex w-full md:w-auto flex-row md:flex-col
-                        items-start md:items-end gap-1 md:gap-2 mt-2 md:mt-0
-                        justify-between md:justify-start"
-        >
-          <p
-            className="text-[10px] md:text-xs lg:text-[11px]
-                        text-[var(--text)]"
-          >
-            {post.date}
+          <p className="text-muted-foreground text-sm line-clamp-3 leading-relaxed">
+            {post.description}
           </p>
-          <div className="flex gap-1">
-            {post.tags.map(tag => (
-              <Tag key={tag} tagName={tag} counts={-1} />
-            ))}
+
+          <div className="flex items-center justify-between mt-4 pt-4 border-t border-border/50 text-xs text-muted-foreground">
+            <span>{post.date}</span>
+            <div className="flex gap-2">
+              {post.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-2.5 py-0.5 rounded-full bg-secondary text-secondary-foreground text-[11px] font-medium border border-border/50 transition-colors hover:bg-secondary/80"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </Link>

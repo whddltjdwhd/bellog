@@ -17,7 +17,7 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
         {prev ? (
           <Link
             href={`/posts/${prev.slug}`}
-            className="group flex-1 p-4 rounded-lg border border-[var(--border)] hover:border-[var(--primary)] transition-all duration-200"
+            className="group flex-1 p-4 rounded-lg border border-border hover:border-primary/20 hover:bg-accent/40 transition-all duration-200"
           >
             <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
               이전 글
@@ -40,7 +40,7 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
         {next ? (
           <Link
             href={`/posts/${next.slug}`}
-            className="group flex-1 p-4 rounded-lg border border-[var(--border)] hover:border-[var(--primary)] transition-all duration-200 text-right"
+            className="group flex-1 p-4 rounded-lg border border-border hover:border-primary/20 hover:bg-accent/40 transition-all duration-200 text-right"
           >
             <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
               다음 글

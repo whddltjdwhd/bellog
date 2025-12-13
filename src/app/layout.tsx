@@ -1,25 +1,21 @@
 import type { Metadata } from "next";
+import { Outfit, Inter } from "next/font/google";
 import "@/styles/global.css";
-import localFont from "next/font/local";
 import Providers from "./providers";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Navbar from "@/components/common/Navbar";
 
-const myFont = localFont({
-  src: [
-    {
-      path: "../../public/fonts/NotoSansKR-VariableFont_wght.ttf",
-      weight: "300",
-      style: "normal",
-    },
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-heading",
+  display: "swap",
+});
 
-    {
-      path: "../../public/fonts/NotoSansKR-VariableFont_wght.ttf",
-      weight: "400",
-      style: "strong",
-    },
-  ],
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -95,11 +91,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={myFont.className} suppressHydrationWarning>
-      <body className="bg-[var(--bg)] w-full flex flex-col justify-center items-center">
+    <html lang="ko" className={`${outfit.variable} ${inter.variable}`}>
+      <body className="bg-background text-foreground w-full flex flex-col justify-center items-center font-sans">
         <Providers>
           <Navbar />
-
           <div className="w-full flex flex-col justify-center items-center">
             {children}
 

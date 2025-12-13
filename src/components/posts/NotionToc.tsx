@@ -23,10 +23,10 @@ const NotionToc = ({ recordMap }: NotionTocProps) => {
   }
 
   const getStyle = (indentLevel: number) => {
-    if (indentLevel === 0) return "text-base";
-    if (indentLevel === 1) return "ml-4 text-sm";
-    if (indentLevel === 2) return "ml-8 text-sm";
-    return "ml-12 text-sm";
+    if (indentLevel === 0) return "";
+    if (indentLevel === 1) return "ml-2";
+    if (indentLevel === 2) return "ml-4";
+    return "ml-6";
   };
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
@@ -36,30 +36,32 @@ const NotionToc = ({ recordMap }: NotionTocProps) => {
 
     if (element instanceof HTMLElement) {
       window.scrollTo({
-        top: element.offsetTop - 80, // 고정 헤더 높이 고려
+        top: element.offsetTop - 100, // 고정 헤더 높이 고려 + offset
         behavior: "smooth",
       });
     }
   };
 
   return (
-    <>
-      <h2 className="mb-4 text-lg font-bold text-[var(--text)]">목차</h2>
-      <ul className="mb-2">
+    <div className="sticky top-32 p-6 rounded-2xl bg-background/50 backdrop-blur-md border border-border/50 shadow-sm transition-all duration-300 hover:shadow-md w-full max-h-[calc(100vh-150px)] overflow-y-auto custom-scrollbar">
+      <h2 className="mb-4 text-lg font-bold font-heading text-foreground border-b border-border/50 pb-2">
+        Contents
+      </h2>
+      <ul className="space-y-1">
         {tableOfContents.map((toc: TableOfContentsEntry) => {
           const parsedId = toc.id.replace(/-/g, ""); // 하이픈 제거
 
           return (
-            <li className="mb-1 font-light tracking-tighter" key={parsedId}>
+            <li className="font-light tracking-tight break-keep" key={parsedId}>
               <a
                 href={`#${parsedId}`}
                 onClick={(e) => handleClick(e, parsedId)}
                 className={cn(
-                  "transition-colors duration-200 ease-in-out hover:text-[var(--link)] cursor-pointer",
+                  "block py-1 pr-2 transition-all duration-200 border-l-2 pl-4 text-sm break-keep hover:bg-accent/50 rounded-r-md",
                   getStyle(toc.indentLevel),
                   activeId === parsedId
-                    ? "text-sky-500 dark:text-sky-400 font-semibold"
-                    : "text-gray-400"
+                    ? "border-primary text-primary font-medium bg-primary/5 rounded-r-md"
+                    : "border-transparent text-muted-foreground hover:text-foreground hover:border-border"
                 )}
               >
                 {toc.text}
@@ -68,7 +70,7 @@ const NotionToc = ({ recordMap }: NotionTocProps) => {
           );
         })}
       </ul>
-    </>
+    </div>
   );
 };
 

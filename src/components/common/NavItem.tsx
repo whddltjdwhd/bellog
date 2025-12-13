@@ -9,13 +9,9 @@ export default function NavItem({ href, children, className }: NavItemProps) {
   return (
     <Link
       href={href}
-      className={`group relative font-bold text-[var(--text)] text-lg sm:text-l md:text-2xl ${className}`}
+      className={`relative font-medium text-muted-foreground hover:text-primary transition-colors duration-300 text-base md:text-lg ${className}`}
     >
       {children}
-      <span
-        className="absolute left-0 -bottom-1 h-0.5 w-0 bg-[var(--text)]
-                     transition-all duration-500 group-hover:w-full"
-      />
     </Link>
   );
 }
