@@ -1,42 +1,93 @@
 @import "tailwindcss";
+@config "../../tailwind.config.ts";
 
 :root {
-  --bg: #f7f8f9;
-  --background: #e5e5eb;
-  --surface: #fcfcfd;
-  --text: #1a1d29;
-  --primary: #059669;
-  --primary-dark: #047857;
-  --link: #0d9488;
-  --accent: #64748b;
-  --code: #f0fdf4;
-  --border: #e5e7eb;
+  --background: 0 0% 98%;
+  --foreground: 240 10% 3.9%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+
+  --primary: 262 83% 58%; /* Reverting to a vibrant purple for brand */
+  --primary-foreground: 210 40% 98%;
+
+  --secondary: 240 5% 96%; /* Neutral gray for tags */
+  --secondary-foreground: 240 6% 10%;
+
+  --muted: 240 5% 96%;
+  --muted-foreground: 240 4% 46%;
+
+  --accent: 240 5% 96%; /* Light gray for hovers */
+  --accent-foreground: 240 6% 10%;
+
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 240 6% 90%;
+  --input: 240 6% 90%;
+  --ring: 262 83% 58%;
+
+  --radius: 0.5rem;
+
+  /* Github Colors (Light Mode - Darker for visibility) */
+  --github-bg: 240 5% 96%; /* Light Gray */
+  --github-border: 240 6% 85%; /* Darker Border */
+  --github-text: 240 10% 3.9%; /* Almost Black */
+  --github-subtext: 240 4% 46%; /* Muted Gray */
+
+  /* Velog Colors (Light Mode - Darker Green/Teal) */
+  --velog-bg: 150 20% 96%; /* Very Light Teal */
+  --velog-border: 160 30% 85%; /* Visible Teal Border */
+  --velog-text: 160 80% 20%; /* Dark Teal */
+  --velog-subtext: 160 60% 40%; /* Medium Teal */
 }
 
-html.dark {
-  --bg: #0f1b1e;
-  --background: #1c2a2d;
-  --surface: #162427;
-  --text: #e6f1f3;
-  --primary: #00a38c;
-  --primary-dark: #008472;
-  --link: #4dc0b5;
-  --accent: #f4b860;
-  --code: #1e2c30;
-  --border: #284247;
+.dark {
+  --background: 240 10% 3.9%; /* Zinc 950: Modern Deep Dark */
+  --foreground: 0 0% 98%;
+
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+
+  --primary: 263 70% 50%; /* Deep Purple */
+  --primary-foreground: 210 40% 98%;
+
+  --secondary: 240 4% 16%; /* Dark Gray for tags */
+  --secondary-foreground: 0 0% 98%;
+
+  --muted: 240 4% 16%;
+  --muted-foreground: 240 5% 65%;
+
+  --accent: 240 4% 16%; /* Dark Gray for hovers */
+  --accent-foreground: 0 0% 98%;
+
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 240 4% 16%;
+  --input: 240 4% 16%;
+  --ring: 240 5% 65%;
+
+  /* Github Colors (Dark Mode - Lighter for visibility) */
+  --github-bg: 240 4% 16%;
+  --github-border: 240 4% 20%;
+  --github-text: 0 0% 98%;
+  --github-subtext: 240 5% 65%;
+
+  /* Velog Colors (Dark Mode) */
+  --velog-bg: 160 20% 10%;
+  --velog-border: 160 20% 15%;
+  --velog-text: 150 50% 80%;
+  --velog-subtext: 150 40% 60%;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not(.light):not(.dark) {
-    --bg: #0f1b1e;
-    --background: #162427;
-    --surface: #162427;
-    --text: #e6f1f3;
-    --primary: #00a38c;
-    --primary-dark: #008472;
-    --link: #4dc0b5;
-    --accent: #f4b860;
-    --code: #1e2c30;
-    --border: #284247;
-  }
+@theme {
+  --font-heading: "Outfit", sans-serif;
+  --font-sans: "Inter", sans-serif;
 }

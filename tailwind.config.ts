@@ -9,6 +9,7 @@ const config: Config = {
   ],
   theme: {
     extend: {
+
       colors: {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
@@ -40,23 +41,31 @@ const config: Config = {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
+        github: {
+          DEFAULT: "hsl(var(--github-bg))",
+          border: "hsl(var(--github-border))",
+          text: "hsl(var(--github-text))",
+          subtext: "hsl(var(--github-subtext))",
+        },
+        velog: {
+          DEFAULT: "hsl(var(--velog-bg))",
+          border: "hsl(var(--velog-border))",
+          text: "hsl(var(--velog-text))",
+          subtext: "hsl(var(--velog-subtext))",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        chart: {
-          "1": "hsl(var(--chart-1))",
-          "2": "hsl(var(--chart-2))",
-          "3": "hsl(var(--chart-3))",
-          "4": "hsl(var(--chart-4))",
-          "5": "hsl(var(--chart-5))",
-        },
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-      
+      fontFamily: {
+        heading: ["var(--font-heading)", "sans-serif"],
+        sans: ["var(--font-sans)", "sans-serif"],
+      },
     },
   },
   plugins: [animate, require("@tailwindcss/typography")],
