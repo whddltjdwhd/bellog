@@ -26,8 +26,8 @@
 
 .notion-code {
   position: relative;
-  background: var(--code);
-  color: var(--text);
+  background: hsl(var(--muted));
+  color: hsl(var(--foreground));
   border-radius: 0.5rem;
   margin: 1rem 0;
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier,
@@ -55,8 +55,8 @@
 }
 
 .notion-quote {
-  background: var(--background, rgba(0, 0, 0, 0.05));
-  border-left: 3px solid var(--accent);
+  background: hsl(var(--muted) / 0.5);
+  border-left: 3px solid hsl(var(--primary));
   padding: 0.8rem 1.25rem;
   margin: 1.2rem 0;
   border-radius: 0 6px 6px 0;
@@ -65,7 +65,7 @@
 }
 
 .notion-quote div {
-  color: var(--text);
+  color: hsl(var(--foreground));
 }
 
 /* 링크 멘션 아이콘 스타일 */
