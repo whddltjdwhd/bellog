@@ -81,7 +81,7 @@ export const metadata: Metadata = {
   },
 
   alternates: {
-    canonical: "https://www.castle-bell.site/",
+    canonical: "./",
   },
 };
 
