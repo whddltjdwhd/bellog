@@ -90,8 +90,27 @@ export default async function Page({ params }: PageProps) {
   // 3. 포스트 내용(recordMap) fetch
   const recordMap = await getPostRecordMap(post.id);
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.description,
+    author: {
+      "@type": "Person",
+      name: "Castle Bell",
+      url: "https://www.castle-bell.site",
+    },
+    datePublished: post.date,
+    url: `https://www.castle-bell.site/posts/${slug}`,
+    keywords: post.tags,
+  };
+
   return (
     <article className="w-full flex flex-col justify-center items-center mt-[100px] mb-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <ScrollProgress />
       <section className="relative w-full max-w-[1300px] grid grid-cols-1 md:grid-cols-12 gap-4">
         <div className="hidden md:block md:col-span-1"></div>
