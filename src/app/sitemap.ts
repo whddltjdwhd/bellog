@@ -3,7 +3,7 @@ import { Post } from "@/types";
 import { getAllPosts } from "@/lib/posts";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://www.castle-bell.site/";
+  const baseUrl = "https://www.castle-bell.site";
 
   const posts = await getAllPosts();
 
