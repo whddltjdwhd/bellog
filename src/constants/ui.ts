@@ -1,0 +1,2 @@
+export const HEADER_OFFSET = 100;
+export const SCROLL_SPY_OFFSET = HEADER_OFFSET + 10;

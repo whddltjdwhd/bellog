@@ -4,6 +4,7 @@ import { ExtendedRecordMap, PageBlock } from "notion-types";
 import { getPageTableOfContents, TableOfContentsEntry } from "notion-utils";
 import useScrollSpy from "@/hooks/useScrollSpy";
 import { cn } from "@/lib/utils";
+import { HEADER_OFFSET } from "@/constants/ui";
 
 interface NotionTocProps {
   recordMap: ExtendedRecordMap;
@@ -36,7 +37,7 @@ const NotionToc = ({ recordMap }: NotionTocProps) => {
 
     if (element instanceof HTMLElement) {
       window.scrollTo({
-        top: element.offsetTop - 100, // 고정 헤더 높이 고려 + offset
+        top: element.offsetTop - HEADER_OFFSET, // 고정 헤더 높이 고려 + offset
         behavior: "smooth",
       });
     }

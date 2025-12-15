@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
+import { SCROLL_SPY_OFFSET } from "@/constants/ui";
 
 interface HeadingElementPosition {
   id: string;
@@ -38,7 +39,7 @@ const useScrollSpy = () => {
       const { id, top } = hElementPositions.current[i];
       // 헤딩의 상단 위치가 현재 스크롤 위치보다 작거나 같으면 활성 후보
       // 80px는 고정 헤더나 상단 여백을 고려한 값입니다.
-      if (scrollY >= top - 80) {
+      if (scrollY >= top - SCROLL_SPY_OFFSET) {
         currentActiveId = id;
       } else {
         // 이미 현재 스크롤 위치를 넘어선 헤딩이므로, 이전 헤딩이 활성
