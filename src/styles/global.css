@@ -46,14 +46,14 @@
 }
 
 .dark {
-  --background: 240 10% 3.9%; /* Zinc 950: Modern Deep Dark */
-  --foreground: 0 0% 98%;
+  --background: 240 6% 10%; /* Soft Dark (Zinc 900) */
+  --foreground: 240 5% 96%;
 
-  --card: 240 10% 3.9%;
-  --card-foreground: 0 0% 98%;
+  --card: 240 6% 13%;
+  --card-foreground: 240 5% 96%;
 
-  --popover: 240 10% 3.9%;
-  --popover-foreground: 0 0% 98%;
+  --popover: 240 6% 13%;
+  --popover-foreground: 240 5% 96%;
 
   --primary: 263 70% 50%; /* Deep Purple */
   --primary-foreground: 210 40% 98%;
@@ -61,7 +61,7 @@
   --secondary: 240 4% 16%; /* Dark Gray for tags */
   --secondary-foreground: 0 0% 98%;
 
-  --muted: 240 4% 16%;
+  --muted: 240 4% 18%;
   --muted-foreground: 240 5% 65%;
 
   --accent: 240 4% 16%; /* Dark Gray for hovers */
