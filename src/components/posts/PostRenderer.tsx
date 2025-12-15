@@ -73,6 +73,7 @@ const PostRenderer = ({ recordMap }: PostRendererProps) => {
         Equation,
         Modal,
         Pdf,
+        Collection: () => null,
       }}
     />
   );
