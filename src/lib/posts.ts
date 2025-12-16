@@ -1,18 +1,36 @@
 import { Post } from "@/types";
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 
 import { getAllPostsFromNotion, getPostBySlugFromNotion } from "./notion";
 
-export const getAllPosts = cache(async (): Promise<Post[]> => {
-  const posts = await getAllPostsFromNotion();
+export const getAllPosts = cache(
+  unstable_cache(
+    async (): Promise<Post[]> => {
+      const posts = await getAllPostsFromNotion();
+      return posts;
+    },
+    ["all-posts"],
+    {
+      revalidate: 3600, // 1시간마다 갱신
+      tags: ["posts", "notion"],
+    }
+  )
+);
 
-  return posts;
-});
-
-export async function getPostBySlug(slug: string) {
-  const post = await getPostBySlugFromNotion(slug);
-
-  return post;
-}
+export const getPostBySlug = cache(
+  async (slug: string): Promise<Post | null> => {
+    return unstable_cache(
+      async () => {
+        return await getPostBySlugFromNotion(slug);
+      },
+      [`post-${slug}`],
+      {
+        revalidate: 3600,
+        tags: [`post-${slug}`, "notion"],
+      }
+    )();
+  }
+);
 
 

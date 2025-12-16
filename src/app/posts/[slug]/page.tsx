@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 
-import { getAllPosts, getPostBySlug } from "@/lib/posts";
+import { getAllPosts } from "@/lib/posts";
 import PostNavigation from "@/components/posts/PostNavigation";
 import GiscusComments from "@/components/posts/GiscusComments";
 import PostRenderer from "@/components/posts/PostRenderer";
@@ -73,21 +73,20 @@ interface PageProps {
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
 
-  // 1. Slug로 현재 포스트 정보만 빠르게 fetch
-  const post = await getPostBySlug(slug);
+  // 1. 전체 목록 fetch 및 인덱스 찾기 (이전/다음 포스트 및 현재 포스트 정보)
+  const allPosts = await getAllPosts();
+  const postIndex = allPosts.findIndex((p) => p.slug === slug);
+  const post = allPosts[postIndex];
 
   if (!post) {
     return notFound();
   }
 
-  // 2. 이전/다음 포스트 구성을 위해 전체 목록 fetch 및 인덱스 찾기
-  const allPosts = await getAllPosts();
-  const postIndex = allPosts.findIndex((p) => p.slug === slug);
   const nextPost = postIndex > 0 ? allPosts[postIndex - 1] : null;
   const prevPost =
     postIndex < allPosts.length - 1 ? allPosts[postIndex + 1] : null;
 
-  // 3. 포스트 내용(recordMap) fetch
+  // 2. 포스트 내용(recordMap) fetch
   const recordMap = await getPostRecordMap(post.id);
 
   const jsonLd = {

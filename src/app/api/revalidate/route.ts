@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,10 +17,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Assuming the webhook payload from Notion indicates a change,
-    // we revalidate the 'posts' path.
-    revalidatePath("/", "page");              // 홈페이지
-    revalidatePath("/posts", "page");         // 포스트 목록 페이지
-    revalidatePath("/posts/[slug]", "page");  // 모든 개별 포스트 페이지
+    // we revalidate the 'notion' tag.
+    // This invalidates the Data Cache for all posts, which in turn
+    // invalidates the Full Route Cache for pages that use this data.
+    revalidateTag("notion");
 
     return NextResponse.json("Revalidation triggered");
   } catch (error) {
