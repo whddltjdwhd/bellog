@@ -83,3 +83,9 @@
   height: 14px;
   border-radius: 2px;
 }
+
+/* 텍스트 스타일 조정 */
+.notion-text,
+.notion-list-item {
+  line-height: 2;
+}
