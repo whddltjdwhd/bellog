@@ -14,30 +14,24 @@
 }
 
 /* 2. 비디오, 이미지 등 에셋 레이아웃 조정 */
-/* Layout Shift 방지를 위한 aspect-ratio 적용 */
+/* Layout Shift 방지 - 이미지 dimension은 OptimizedNotionImage에서 인라인으로 적용 */
 .notion-asset-wrapper {
   width: 100%;
   margin: 2rem 0;
   position: relative;
-  aspect-ratio: auto; /* 인라인 스타일로 오버라이드 가능 */
 }
 
 .notion-asset-wrapper div {
   width: 100%;
   position: relative;
-  /* height: auto !important 제거 - Layout Shift 원인 */
 }
 
-/* 기본 aspect ratio 설정 (이미지 dimension 미지정시) */
-.notion-asset-wrapper-image {
-  aspect-ratio: 16 / 9;
+/* 이미지 컨테이너 기본 스타일 */
+.notion-asset-wrapper-image,
+.notion-asset-wrapper-full {
   position: relative;
   overflow: hidden;
-}
-
-/* Full-width 이미지를 위한 wider aspect ratio */
-.notion-asset-wrapper-full {
-  aspect-ratio: 21 / 9;
+  /* aspect-ratio는 OptimizedNotionImage에서 동적으로 설정됨 */
 }
 
 /* 이미지 로딩 skeleton */
