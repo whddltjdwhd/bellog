@@ -56,7 +56,7 @@
 }
 
 /* 이미지가 로드되면 skeleton 숨김 */
-.notion-asset-wrapper:has(img) .notion-asset-wrapper::before {
+.notion-asset-wrapper:has(img)::before {
   display: none;
 }
 
