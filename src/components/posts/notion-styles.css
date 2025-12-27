@@ -14,14 +14,69 @@
 }
 
 /* 2. 비디오, 이미지 등 에셋 레이아웃 조정 */
+/* Layout Shift 방지를 위한 aspect-ratio 적용 */
 .notion-asset-wrapper {
   width: 100%;
   margin: 2rem 0;
+  position: relative;
+  aspect-ratio: auto; /* 인라인 스타일로 오버라이드 가능 */
 }
 
 .notion-asset-wrapper div {
   width: 100%;
-  height: auto !important;
+  position: relative;
+  /* height: auto !important 제거 - Layout Shift 원인 */
+}
+
+/* 기본 aspect ratio 설정 (이미지 dimension 미지정시) */
+.notion-asset-wrapper-image {
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Full-width 이미지를 위한 wider aspect ratio */
+.notion-asset-wrapper-full {
+  aspect-ratio: 21 / 9;
+}
+
+/* 이미지 로딩 skeleton */
+.notion-asset-wrapper::before {
+  content: '';
+  display: block;
+  background: hsl(var(--muted));
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  animation: notion-image-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  z-index: -1;
+  border-radius: 0.5rem;
+}
+
+/* 이미지가 로드되면 skeleton 숨김 */
+.notion-asset-wrapper:has(img) .notion-asset-wrapper::before {
+  display: none;
+}
+
+/* 이미지가 컨테이너를 올바르게 채우도록 설정 */
+.notion-image,
+.notion-asset-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Skeleton 애니메이션 */
+@keyframes notion-image-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
 }
 
 .notion-code {
