@@ -69,13 +69,16 @@ export default function Intro() {
         variants={item}
         className="col-span-2 md:col-span-2 md:row-span-2 p-8 rounded-3xl bg-background/40 backdrop-blur-xl border border-border/50 shadow-sm flex flex-col justify-center gap-4 hover:border-primary/30 transition-colors duration-500"
       >
-        <div className="font-heading font-bold text-3xl md:text-4xl text-foreground">
+        <div className="font-heading font-bold text-3xl md:text-4xl text-foreground min-h-30">
           <TypeAnimation
             sequence={["안녕하세요, \n이해하는 개발자 \n이성종입니다."]}
             wrapper="span"
             cursor={true}
             repeat={0}
-            style={{ whiteSpace: "pre-line", display: "block" }}
+            style={{
+              whiteSpace: "pre-line",
+              display: "block",
+            }}
           />
         </div>
         <p className="text-muted-foreground text-lg leading-relaxed">
