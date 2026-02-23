@@ -5,7 +5,6 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
-    console.log("Received Webhook Body:", JSON.stringify(body, null, 2));
     // Handle Notion's URL verification challenge
     if (body.type === "url_verification") {
       return NextResponse.json({ challenge: body.challenge });

@@ -8,6 +8,7 @@ import PostRenderer from "@/components/posts/PostRenderer";
 import NotionToc from "@/components/posts/NotionToc";
 import ScrollProgress from "@/components/common/ProgressBar";
 import { getPostRecordMap } from "@/lib/notion";
+import { SITE_URL, SITE_AUTHOR } from "@/constants/site";
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
@@ -32,7 +33,7 @@ export async function generateMetadata({
 
   const title = post.title;
   const description = post.description;
-  const postUrl = `https://www.castle-bell.site/posts/${slug}`;
+  const postUrl = `${SITE_URL}/posts/${slug}`;
 
   return {
     title: title,
@@ -44,7 +45,7 @@ export async function generateMetadata({
       type: "article",
       images: [
         {
-          url: "https://www.castle-bell.site/og-image.png",
+          url: `${SITE_URL}/og-image.png`,
           width: 1200,
           height: 630,
           alt: title,
@@ -55,7 +56,8 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: title,
       description: description,
-      images: ["https://www.castle-bell.site/og-image.png"],
+      images: [`${SITE_URL}/og-image.png`],
+      site: "@castle_bell",
     },
     alternates: {
       canonical: postUrl,
@@ -96,11 +98,11 @@ export default async function Page({ params }: PageProps) {
     description: post.description,
     author: {
       "@type": "Person",
-      name: "Castle Bell",
-      url: "https://www.castle-bell.site",
+      name: SITE_AUTHOR,
+      url: SITE_URL,
     },
     datePublished: post.date,
-    url: `https://www.castle-bell.site/posts/${slug}`,
+    url: `${SITE_URL}/posts/${slug}`,
     keywords: post.tags,
   };
 

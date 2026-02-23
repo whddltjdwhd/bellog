@@ -8,7 +8,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <ProgressProvider
         height="4px"
-        color="#8b5cf6"
+        color="hsl(var(--primary))"
         options={{ showSpinner: false }}
         shallowRouting={false}
       >

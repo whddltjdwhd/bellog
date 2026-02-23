@@ -5,6 +5,7 @@ import Providers from "./providers";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Navbar from "@/components/common/Navbar";
+import { SITE_URL } from "@/constants/site";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -19,7 +20,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.castle-bell.site"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Bellog",
     template: "%s | Bellog",
