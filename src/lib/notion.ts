@@ -15,6 +15,45 @@ const notionX = new NotionAPI({
   authToken: process.env.NOTION_TOKEN_V2,
 });
 
+function buildPostFromPage(
+  page: PageObjectResponse,
+  slugOverride?: string
+): Post {
+  const { properties } = page;
+
+  const title = properties.title as {
+    type: "title";
+    title: { plain_text: string }[];
+  };
+  const date = properties.date as { type: "date"; date: { start: string } };
+  const description = properties.description as {
+    type: "rich_text";
+    rich_text: { plain_text: string }[];
+  };
+  const slug = properties.slug as {
+    type: "rich_text";
+    rich_text: { plain_text: string }[];
+  };
+  const tags = properties.tags as {
+    type: "multi_select";
+    multi_select: { name: string }[];
+  };
+  const status = properties.status as {
+    type: "select";
+    select: { name: string };
+  };
+
+  return {
+    id: page.id,
+    title: title.title[0]?.plain_text ?? "Untitled",
+    date: date.date.start,
+    description: description.rich_text[0]?.plain_text ?? "",
+    slug: slugOverride ?? slug.rich_text[0]?.plain_text ?? "",
+    tags: tags.multi_select.map((tag) => tag.name),
+    status: status.select.name,
+  } as Post;
+}
+
 export const getAllPostsFromNotion = async (): Promise<Post[]> => {
   const databaseId = process.env.NOTION_DATABASE_ID;
 
@@ -42,46 +81,7 @@ export const getAllPostsFromNotion = async (): Promise<Post[]> => {
     (page): page is PageObjectResponse => "properties" in page
   );
 
-  const posts = pages.map((page) => {
-    const { properties } = page;
-
-    const title = properties.title as {
-      type: "title";
-      title: { plain_text: string }[];
-    };
-    const date = properties.date as { type: "date"; date: { start: string } };
-    const description = properties.description as {
-      type: "rich_text";
-      rich_text: { plain_text: string }[];
-    };
-    const slug = properties.slug as {
-      type: "rich_text";
-      rich_text: { plain_text: string }[];
-    };
-    const tags = properties.tags as {
-      type: "multi_select";
-      multi_select: { name: string }[];
-    };
-    const status = properties.status as {
-      type: "select";
-      select: { name: string };
-    };
-
-    const descriptionText = description.rich_text[0]?.plain_text ?? "";
-    const slugText = slug.rich_text[0]?.plain_text ?? "";
-
-    return {
-      id: page.id,
-      title: title.title[0].plain_text,
-      date: date.date.start,
-      description: descriptionText,
-      slug: slugText,
-      tags: tags.multi_select.map((tag) => tag.name),
-      status: status.select.name,
-    } as Post;
-  });
-
-  return posts;
+  return pages.map((page) => buildPostFromPage(page));
 };
 
 export const getPostRecordMap = async (pageId: string) => {
@@ -117,36 +117,5 @@ export const getPostBySlugFromNotion = async (
     return null;
   }
 
-  const { properties } = page as PageObjectResponse;
-
-  const title = properties.title as {
-    type: "title";
-    title: { plain_text: string }[];
-  };
-  const date = properties.date as { type: "date"; date: { start: string } };
-  const description = properties.description as {
-    type: "rich_text";
-    rich_text: { plain_text: string }[];
-  };
-  const tags = properties.tags as {
-    type: "multi_select";
-    multi_select: { name: string }[];
-  };
-  const status = properties.status as {
-    type: "select";
-    select: { name: string };
-  };
-
-  const descriptionText = description.rich_text[0]?.plain_text ?? "";
-  const slugText = slug;
-
-  return {
-    id: page.id,
-    title: title.title[0].plain_text,
-    date: date.date.start,
-    description: descriptionText,
-    slug: slugText,
-    tags: tags.multi_select.map((tag) => tag.name),
-    status: status.select.name,
-  } as Post;
+  return buildPostFromPage(page as PageObjectResponse, slug);
 };
