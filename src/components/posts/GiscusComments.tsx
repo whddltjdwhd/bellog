@@ -3,6 +3,7 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import Giscus from "@giscus/react";
+import { GISCUS_CONFIG } from "@/constants/site";
 
 export default function GiscusComments() {
   const { theme } = useTheme();
@@ -20,10 +21,10 @@ export default function GiscusComments() {
     <div className="mt-8">
       <Giscus
         id="comments"
-        repo="whddltjdwhd/bellogComments" // 여기에 실제 레포지토리 정보 입력
-        repoId="R_kgDOO4u0wA" // GitHub에서 가져온 실제 repo ID
-        category="General"
-        categoryId="DIC_kwDOO4u0wM4CrP29" // GitHub에서 가져온 실제 category ID
+        repo={GISCUS_CONFIG.repo}
+        repoId={GISCUS_CONFIG.repoId}
+        category={GISCUS_CONFIG.category}
+        categoryId={GISCUS_CONFIG.categoryId}
         mapping="pathname"
         strict="0"
         reactionsEnabled="1"

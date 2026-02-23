@@ -13,7 +13,7 @@ export const getAllPosts = cache(
     ["all-posts"],
     {
       revalidate: 3600, // 1시간마다 갱신
-      tags: ["posts", "notion"],
+      tags: ["notion"],
     }
   )
 );

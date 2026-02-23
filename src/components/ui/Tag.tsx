@@ -1,7 +1,4 @@
-"use client";
-
 import { TagProps } from "@/types";
-import React from "react";
 
 export default function Tag({
   tagName,
