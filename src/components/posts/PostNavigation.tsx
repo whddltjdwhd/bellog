@@ -19,15 +19,15 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
             href={`/posts/${prev.slug}`}
             className="group flex-1 p-4 rounded-lg border border-border hover:border-primary/20 hover:bg-accent/40 transition-all duration-200"
           >
-            <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+            <div className="text-sm text-muted-foreground mb-1">
               이전 글
             </div>
             <div className="flex items-center gap-2">
               <div>
-                <h3 className="font-medium text-[var(--text)] text-sm sm:text-base md:text-lg transition-colors break-keep">
+                <h3 className="font-medium text-foreground text-sm sm:text-base md:text-lg transition-colors break-keep">
                   {prev.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-[var(--accent)] mt-1 line-clamp-2 break-keep">
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-2 break-keep">
                   {prev.description}
                 </p>
               </div>
@@ -42,15 +42,15 @@ export default function PostNavigation({ prev, next }: PostNavigationProps) {
             href={`/posts/${next.slug}`}
             className="group flex-1 p-4 rounded-lg border border-border hover:border-primary/20 hover:bg-accent/40 transition-all duration-200 text-right"
           >
-            <div className="text-sm text-gray-500 dark:text-gray-400 mb-1">
+            <div className="text-sm text-muted-foreground mb-1">
               다음 글
             </div>
             <div className="flex items-center justify-end gap-2">
               <div>
-                <h3 className="font-medium text-[var(--text)] text-sm sm:text-base md:text-lg transition-colors break-keep">
+                <h3 className="font-medium text-foreground text-sm sm:text-base md:text-lg transition-colors break-keep">
                   {next.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-[var(--accent)] mt-1 line-clamp-2 break-keep">
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1 line-clamp-2 break-keep">
                   {next.description}
                 </p>
               </div>
