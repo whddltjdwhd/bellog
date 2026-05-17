@@ -1,7 +1,11 @@
 "use client";
 
 import { ExtendedRecordMap, PageBlock } from "notion-types";
-import { getPageTableOfContents, TableOfContentsEntry } from "notion-utils";
+import {
+  getBlockValue,
+  getPageTableOfContents,
+  TableOfContentsEntry,
+} from "notion-utils";
 import useScrollSpy from "@/hooks/useScrollSpy";
 import { cn } from "@/lib/utils";
 import { HEADER_OFFSET } from "@/constants/ui";
@@ -16,7 +20,7 @@ const NotionToc = ({ recordMap }: NotionTocProps) => {
   // recordMap에서 rootPageId를 가져옵니다.
   const rootPageId = Object.keys(recordMap.block)[0];
   // rootPageId를 사용하여 해당 페이지 블록을 가져옵니다.
-  const page = recordMap.block[rootPageId]?.value;
+  const page = getBlockValue(recordMap.block[rootPageId]?.value);
 
   let tableOfContents: TableOfContentsEntry[] = [];
   if (page) {

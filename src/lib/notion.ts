@@ -85,8 +85,19 @@ export const getAllPostsFromNotion = async (): Promise<Post[]> => {
 };
 
 export const getPostRecordMap = async (pageId: string) => {
-  const recordMap = await notionX.getPage(pageId);
-  return recordMap;
+  const maxAttempts = 3;
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      return await notionX.getPage(pageId);
+    } catch (error) {
+      lastError = error;
+      if (attempt < maxAttempts) {
+        await new Promise((resolve) => setTimeout(resolve, 500 * attempt));
+      }
+    }
+  }
+  throw lastError ?? new Error(`Failed to fetch recordMap for ${pageId}`);
 };
 
 export const getPostBySlugFromNotion = async (

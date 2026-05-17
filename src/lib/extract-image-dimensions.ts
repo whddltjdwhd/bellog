@@ -1,4 +1,5 @@
 import { ExtendedRecordMap } from "notion-types";
+import { getBlockValue } from "notion-utils";
 
 interface ImageDimensions {
   width: number;
@@ -21,7 +22,7 @@ export function extractImageDimensions(
 
   // Iterate through all blocks
   Object.values(recordMap.block).forEach((blockWrapper) => {
-    const block = blockWrapper?.value;
+    const block = getBlockValue(blockWrapper?.value);
 
     if (!block || block.type !== "image") {
       return;
