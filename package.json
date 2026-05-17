@@ -21,7 +21,7 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.26.2",
     "lucide-react": "^0.475.0",
-    "next": "^15.5.13",
+    "next": "^15.5.18",
     "next-themes": "^0.4.6",
     "notion-client": "^7.7.3",
     "notion-types": "^7.7.3",
@@ -37,7 +37,13 @@
   },
   "pnpm": {
     "overrides": {
-      "flatted": "^3.4.0"
+      "flatted": "^3.4.0",
+      "fast-uri": "^3.1.2",
+      "postcss": "^8.5.10",
+      "picomatch@<2.3.2": "^2.3.2",
+      "picomatch@>=4.0.0 <4.0.4": "^4.0.4",
+      "brace-expansion@<1.1.13": "^1.1.13",
+      "brace-expansion@>=2.0.0 <2.0.3": "^2.0.3"
     }
   },
   "devDependencies": {
@@ -52,7 +58,7 @@
     "eslint": "^9.39.4",
     "eslint-config-next": "15.1.7",
     "husky": "^9.1.7",
-    "postcss": "^8.5.6",
+    "postcss": "^8.5.10",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3"
   }
