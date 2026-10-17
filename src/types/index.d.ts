@@ -1,4 +1,4 @@
-export type PostStatus = "draft" | "published" | "archived";
+export type PostStatus = "draft" | "published" | "archived" | "unlisted";
 
 export interface Post {
   id: string;
