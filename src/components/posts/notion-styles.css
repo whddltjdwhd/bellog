@@ -138,3 +138,34 @@
 .notion-list-item {
   line-height: 2;
 }
+
+/* Notion 간단 표 */
+/* Notion API로 만든 표는 열 너비가 없어 열마다 120px로 렌더되어 본문 폭의 일부만 차지한다. */
+/* 표를 본문 폭에 맞추고, 내용이 폭을 넘는 표는 페이지 대신 표 안에서 가로로 스크롤한다. */
+.notion-simple-table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border: 0;
+  margin: 1rem 0;
+}
+
+/* display: block 인 표 안에서 tbody 가 실제 표 레이아웃을 맡는다 */
+.notion-simple-table > tbody {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* 기본값 120px 은 내용 기준으로 나누고, Notion 에서 직접 조절한 너비는 그대로 둔다 */
+.notion-simple-table td[style*="width:120px"],
+.notion-simple-table td[style*="width: 120px"] {
+  width: auto !important;
+}
+
+/* 한글을 음절 단위가 아니라 단어 단위로 줄바꿈한다 */
+.notion-simple-table td {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
