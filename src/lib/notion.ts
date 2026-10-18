@@ -89,7 +89,9 @@ export const getPostRecordMap = async (pageId: string) => {
   let lastError: unknown;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      return await notionX.getPage(pageId);
+      // getCustomEmojis는 authToken을 공식 API(api.notion.com)에 Bearer로 보낸다.
+      // 여기 authToken은 token_v2 쿠키라 인증에 실패하므로 기본값(false)을 명시해 둔다.
+      return await notionX.getPage(pageId, { fetchCustomEmojis: false });
     } catch (error) {
       lastError = error;
       if (attempt < maxAttempts) {
