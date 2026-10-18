@@ -17,6 +17,11 @@ const nextConfig = {
         protocol: "https", 
         hostname: "file.notion.so" 
       },
+      // react-notion-x 8.x는 Notion 이미지를 app.notion.com/image 프록시로 매핑하고,
+      // 이 프록시는 img.notionusercontent.com으로 리다이렉트한다.
+      { protocol: "https", hostname: "app.notion.com" },
+      { protocol: "https", hostname: "file.notion.com" },
+      { protocol: "https", hostname: "img.notionusercontent.com" },
     ],
     formats: ["image/avif", "image/webp"],
     dangerouslyAllowSVG: true,
