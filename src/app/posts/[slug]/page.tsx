@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 
-import { getAllPosts } from "@/lib/posts";
+import { getAllPosts, getPostView } from "@/lib/posts";
 import PostNavigation from "@/components/posts/PostNavigation";
 import GiscusComments from "@/components/posts/GiscusComments";
 import PostRenderer from "@/components/posts/PostRenderer";
@@ -21,16 +21,17 @@ export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const posts = await getAllPosts();
-  const post = posts.find((p) => p.slug === slug);
+  const view = await getPostView(slug);
 
-  if (!post) {
+  if (!view) {
     return {
       title: "게시물을 찾을 수 없습니다",
       description: "요청하신 게시물을 찾을 수 없습니다.",
     };
   }
 
+  const { post } = view;
+  const isUnlisted = post.status === "unlisted";
   const title = post.title;
   const description = post.description;
   const postUrl = `${SITE_URL}/posts/${slug}`;
@@ -63,6 +64,7 @@ export async function generateMetadata({
       canonical: postUrl,
     },
     keywords: post.tags.join(", "),
+    ...(isUnlisted && { robots: { index: false, follow: false } }),
   };
 }
 
@@ -75,18 +77,15 @@ interface PageProps {
 export default async function Page({ params }: PageProps) {
   const { slug } = await params;
 
-  // 1. 전체 목록 fetch 및 인덱스 찾기 (이전/다음 포스트 및 현재 포스트 정보)
-  const allPosts = await getAllPosts();
-  const postIndex = allPosts.findIndex((p) => p.slug === slug);
-  const post = allPosts[postIndex];
+  // 1. 현재 포스트와 이전/다음 포스트 조회 (unlisted 글은 이웃 없이 단독으로 열린다)
+  const view = await getPostView(slug);
 
-  if (!post) {
+  if (!view) {
     return notFound();
   }
 
-  const nextPost = postIndex > 0 ? allPosts[postIndex - 1] : null;
-  const prevPost =
-    postIndex < allPosts.length - 1 ? allPosts[postIndex + 1] : null;
+  const { post, prevPost, nextPost } = view;
+  const isUnlisted = post.status === "unlisted";
 
   // 2. 포스트 내용(recordMap) fetch
   const recordMap = await getPostRecordMap(post.id);
@@ -133,8 +132,12 @@ export default async function Page({ params }: PageProps) {
             </div>
           </header>
           <PostRenderer recordMap={recordMap} />
-          <PostNavigation prev={prevPost} next={nextPost} />
-          <GiscusComments />
+          {!isUnlisted && (
+            <>
+              <PostNavigation prev={prevPost} next={nextPost} />
+              <GiscusComments />
+            </>
+          )}
         </main>
         <aside className="hidden md:block md:col-span-3 sticky top-32 h-fit py-8 pr-3">
           <NotionToc recordMap={recordMap} />

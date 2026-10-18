@@ -130,3 +130,44 @@ export const getPostBySlugFromNotion = async (
 
   return buildPostFromPage(page as PageObjectResponse, slug);
 };
+
+export const getUnlistedPostBySlugFromNotion = async (
+  slug: string
+): Promise<Post | null> => {
+  const databaseId = process.env.NOTION_DATABASE_ID;
+
+  if (!databaseId) {
+    throw new Error("NOTION_DATABASE_ID is not defined");
+  }
+
+  const response: QueryDatabaseResponse = await notion.databases.query({
+    database_id: databaseId,
+    filter: {
+      and: [
+        {
+          property: "slug",
+          rich_text: {
+            equals: slug,
+          },
+        },
+        {
+          property: "status",
+          select: {
+            equals: "unlisted",
+          },
+        },
+      ],
+    },
+  });
+
+  if (response.results.length === 0) {
+    return null;
+  }
+
+  const page = response.results[0];
+  if (!("properties" in page)) {
+    return null;
+  }
+
+  return buildPostFromPage(page as PageObjectResponse, slug);
+};
