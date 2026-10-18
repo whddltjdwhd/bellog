@@ -27,6 +27,9 @@ const NotionToc = ({ recordMap }: NotionTocProps) => {
     tableOfContents = getPageTableOfContents(page as PageBlock, recordMap);
   }
 
+  // 제목(header, sub_header, sub_sub_header) 블록이 없는 글은 빈 Contents 박스를 그리지 않는다.
+  if (tableOfContents.length === 0) return null;
+
   const getStyle = (indentLevel: number) => {
     if (indentLevel === 0) return "";
     if (indentLevel === 1) return "ml-2";
